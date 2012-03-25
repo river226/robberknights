@@ -50,7 +50,7 @@ class PlayerTile {
 		for(int i = 0; i < 3; i++)
 			setA[i] = deck.get(i);
 		
-		currentSet = 2;
+		currentSet = 4;
 		
 		addTile(deck.get(3));
 		
