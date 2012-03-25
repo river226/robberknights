@@ -67,8 +67,7 @@ class Player {
 	}
 	
 	// Restore the hand after making the first move
-	public void firstMoveSet(Tile one, Tile two) {
-		tiles.addTile(one);
-		tiles.addTile(two);
+	public void firstMoveSet(Tile t) {
+		tiles.addTile(t);
 	}
 }
