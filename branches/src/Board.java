@@ -7,18 +7,45 @@
  * 
  */
 
-class Board() {
+class Board {
 
 	private Tile[][] grid;
+	private int botY, topY, lefX, ritX, height, width; 
+	private final int max;
 	
 	// constructor, initialize variables
 	public Board(int playNum) {
-		switch(
+		switch(playNum) {
+		 case(2) : grid = new Tile[10][10]; // 8x8 with buffer on each side
+		 case(3) : grid = new Tile[11][11]; // 9x9 with buffer on each side
+		 default : grid = new Tile[12][12]; // 10x10 with buffer on each side
+		}
+		
+		max = grid.length - 2;
 	}
 	
-	// Take a tile and a location (XxY) 
-	public String placeTile(Tile t, String location) {
-	
+	// Take a tile and a location. Return 0 if succesful, 1 if not
+	public int placeTile(Tile t, int x, int y) {		
+		if(grid[x][y] == null && valid(x, y)) {
+			
+			grid[x][y] = t;
+			
+			if(x > getRightX())
+				setRightX(x);
+			else if(x < getLeftX())
+				setLeftX(x);
+			
+			if(y > getBottomY())
+				setBottomY(y);
+			else if(y < getTopY())
+				setTopY(y);
+				
+			boardFixCheck();
+			
+			return 0;
+		}
+		
+		return 1;
 	}
 	
 	// Get the Grid 
@@ -26,15 +53,155 @@ class Board() {
 		return grid;
 	}
 	
-	// Get the Score value of the Tile
-	public void playKnights(int count) {
-		remainingKnights -= count;
+	// Reset Width and Height
+	public void reset() {
+		setHeight(getBottomY() - getTopY());
+		setWidth(getRightX() - getLeftX());
 	}
 	
-	// Get the a tile from the hand and add a new tile
-	public Tile makeMove(int location) {
-		Tile t = tiles.playTile(location);
-		tiles.draw();
-		return t;
+	// Retrieve the top tile row
+	public int getTopY() {
+		return topY;
+	}
+	
+	// Retrieve the bottom tile row
+	public int getBottomY() {
+		return botY;
+	}
+	
+	// Retrieve the Leftmost tile column
+	public int getLeftX() {
+		return lefX;
+	}
+	
+	// Retrieve the Rightmost tile column
+	public int getRightX() {
+		return ritX;
+	}
+	
+	// Retrieve the width of the playfield
+	public int getWidth() {
+		return width;
+	}
+	
+	// Retrieve the height of the playfield
+	public int getHeight() {
+		return height;
+	}
+	
+	// Retrieve the max width of the playfield
+	public int getMax() {
+		return max;
+	}
+	
+	// Set the Top row of the playfield
+	public void setTopY(int x) {
+		topY = x;
+		reset();
+	}
+	
+	// Set the Bottom row of the playfield
+	public void setBottomY(int x) {
+		botY = x;
+		reset();
+	}
+	
+	// Set the leftmost column of the playfield
+	public void setLeftX(int x) {
+		lefX = x;
+		reset();
+	}
+	
+	// Set the rightmost column of the playfield
+	public void setRightX(int x) {
+		ritX = x;
+		reset();
+	}
+	
+	// Set the width of the playfield
+	public void setWidth(int x) {
+		width = x;
+	}
+	
+	// Set the width of the playfield
+	public void setHeight(int x) {
+		height = x;
+	}
+	
+	// Determine if a space is a valid spot or not
+	public boolean valid(int x, int y) {
+		if(getHeight() == getMax() && (x > getRightX() || x < getLeftX()))
+			return false;
+		else if(getWidth() == getMax() && (y > getBottomY() || y < getTopY()))
+			return false;
+		else
+			return true;
+	}
+	
+	// Check if the playfield needs to be moved
+	private void boardFixCheck() {
+		if(getTopY() == 0) {
+			int c = (getMax() + 2) - getBottomY()/2;
+			moveField(3, c);
+			setTopY(getTopY() - c);
+			setBottomY(getBottomY() - c);
+		}
+		else if(getBottomY() == getMax() + 2) {
+			int c = (getTopY()/2);
+			moveField(2, c);
+			setTopY(getTopY()+ c);
+			setBottomY(getBottomY() + c);
+		}
+		
+		if(getLeftX() == 0) {
+			int c = (getMax() + 2) - getRightX()/2;
+			moveField(1, c);
+			setLeftX(getLeftX() + c);
+			setRightX(getRightX() + c);
+		}
+		else if(getRightX() == getMax() + 2) {
+			int c = (getLeftX()/2);
+			moveField(0, c);
+			setLeftX(getLeftX() - c);
+			setRightX(getRightX() - c);
+		}
+	}
+	
+	// Move the playfield 
+	// for dir: 0 = Left, 1 = Right, 2 = Up, 3 = down
+	// for dis, int is how far over to move. 
+	private void moveField(int dir, int dis) {
+		if(dir == 0) {
+			for(int i = getLeftX(); i <= getRightX(); i++) {
+				for(int j = getTopY(); j <= getBottomY(); j++) {
+					grid[i - dis][j] = grid[i][j];
+					grid[i][j] = null;
+				}
+			}
+		}
+		else if(dir == 1) {
+			for(int i = getRightX(); i <= getLeftX(); i--) {
+				for(int j = getTopY(); j <= getBottomY(); j++) {
+					grid[i + dis][j] = grid[i][j];
+					grid[i][j] = null;
+				}
+			}
+		}
+		else if(dir == 2) {
+			for(int i =  getTopY(); i <= getBottomY(); i--) {
+				for(int j = getLeftX(); j <= getRightX(); j++) {
+					grid[j][i - dis] = grid[i][j];
+					grid[i][j] = null;
+				}
+			}
+		}
+		else {
+			for(int i =  getBottomY(); i <= getTopY(); i++) {
+				for(int j = getLeftX(); j <= getRightX(); j++) {
+					grid[j][i + dis] = grid[i][j];
+					grid[i][j] = null;
+				}
+			}
+		}
 	}
 }
