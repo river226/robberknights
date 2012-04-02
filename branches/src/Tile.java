@@ -51,7 +51,7 @@ class Tile {
 			case(1): return "castle";
 			case(2): return "village";
 			case(3): return "town";
-			default: return null;
+			default: return "none";
 		}
 	}
 	
@@ -110,5 +110,33 @@ class Tile {
 	// Return the required knights to take the Tile
 	public int minKnight() {
 		return enviroment;
+	}
+	
+	// Get the filepath for the image of the file
+	public string getImage() {
+		String name = ".png";
+		
+		name = getEnviroment() + name;
+		
+		name =  getHabitat() + "_" + name;
+		
+		color = topKnight();
+		
+		switch(color) {
+			case(1):
+				name = "red_" + name; break;
+			case(2):
+				name = "blue_" + name; break;
+			case(3):
+				name = "yellow_" + name; break;
+			case(4):
+				name = "green_" + name; break;
+			default
+				name = "none_" + name; break;
+		}
+		
+		name = "/library/images/tiles/" + name;
+		
+		return name;
 	}
 }
