@@ -135,7 +135,7 @@ class Tile {
 				name = "none_" + name; break;
 		}
 		
-		name = "/library/images/tiles/" + name;
+		name = "/library/images/tiles/" + getEnviroment()  + "/" + name;
 		
 		return name;
 	}
