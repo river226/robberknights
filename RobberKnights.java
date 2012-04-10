@@ -3,12 +3,12 @@
  *
  * The RobberKnights Class:
  *
- * The RobberKnights class starts the game by calling the Game class, which runs the game. 
+ * The RobberKnights class starts the game by calling the BoardGame class, which runs the game. 
  * 
  */
 
 class RobberKnights {
 	public static void main(String[] args) {
-		Game play = new Game();
+		BoardGame play = new BoardGame();
 	}
 }
