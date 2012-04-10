@@ -14,10 +14,12 @@ class Player {
 	private final String color;
 	private PlayerTile tiles;
 	private int remainingKnights;
+	private final String name;
 	
 	// constructor, initialize variables
-	public Player(int num) {
+	public Player(int num, String n) {
 		id = num;
+		name = n;
 		
 		if(id == 1)
 			color = "Red";
@@ -69,5 +71,10 @@ class Player {
 	// Restore the hand after making the first move
 	public void firstMoveSet(Tile t) {
 		tiles.addTile(t);
+	}
+	
+	// get the players name
+	public String getName() {
+		return name()
 	}
 }
