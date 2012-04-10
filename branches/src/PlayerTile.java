@@ -17,11 +17,12 @@
  
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Stack;
  
 class PlayerTile {
 	
-	private Tile[] hand;
-	private ArrayList<Tile> deck = new ArrayList(0); // unchecked, 0 is not an illegal argument
+	private Stack<Tile> hand;
+	private Stack<Tile> deck = new Stack();
 	
 	// currentSet hold the number of Tiles that have been drawn from the deck
 	// handSize hold the current position in the hand array
@@ -29,13 +30,13 @@ class PlayerTile {
 	
 	// constructor, Build the deck and assemble hand
 	public PlayerTile() {
-		shuffle();
+		Initialize();
 	}
 	
 	// Add a tile to the hand, return 1 if it failed 0 if successful
 	public int addTile(Tile newTile) {
 		if(handSize() < 2) {
-			hand[handSize()] = newTile;
+			hand.push(newTile);
 			handSize++;
 			return 0;
 		}
@@ -47,29 +48,26 @@ class PlayerTile {
 	public Tile[] getSetA() {
 		Tile[] setA = new Tile[3];
 		
-		for(int i = 0; i < 3; i++)
-			setA[i] = deck.get(i);
+		for(int i = 0; i < 3; i++) {
+			setA[i] = deck.pop();
+			currentSet--;
+		}
 		
-		currentSet = 4;
-		
-		addTile(deck.get(3));
+		addTile(deck.pop());
 		
 		return setA;
 	}
 	
-	// Play a Tile fromt he hand, return null if hand is empty
-	public Tile playTile(int tile) {
-		if(tile < 2){
-			handSize--;
-			return showHand()[tile];
-		}
-		
-		return null;
-	}
-	
 	// retrieve the players hand
 	public Tile[] showHand() {
-		return hand;
+		handsize = 0;
+		
+		if(handSize() == 2)
+			return Tile[] temp = [hand.pop(), hand.pop()];
+		else if(handSize() == 1)
+			return Tile[] temp = [hand.pop()];
+		else
+			return null;
 	}
 	
 	// return the current number of tiles in the hand
@@ -79,48 +77,51 @@ class PlayerTile {
 	
 	// initialize the deck deck
 	private void Initialize() {
+		ArrayList<Tile> tempDeck() = new ArrayList(0);
 		// for habitat    0 = none, 1 = castle, 2 = village, 3 = town
 		// for enviroment 0 = lake, 1 = plain, 2 = woods, 3 = mountains
 		int none = 0, castle = 1, village = 2, town = 3;
 		int lake = 0, plain = 1, woods = 2, mountains = 3;
 		
 		// set A - Plain, Plain Village, Mountains, Plain Castle
-		deck.add(new Tile(plain, none, 'A'));
-		deck.add(new Tile(plain, village, 'A'));
-		deck.add(new Tile(mountains, none, 'A'));
-		deck.add(new Tile(plain, castle, 'A'));
+		tempDeck.add(new Tile(plain, none, 'A'));
+		tempDeck.add(new Tile(plain, village, 'A'));
+		tempDeck.add(new Tile(mountains, none, 'A'));
+		tempDeck.add(new Tile(plain, castle, 'A'));
 		
 		// set B - Water, Plain Castle, Plain Village, Woods Village, Plain Town
-		deck.add(new Tile(lake, none, 'B'));
-		deck.add(new Tile(plain, castle, 'B'));
-		deck.add(new Tile(plain, village, 'B'));
-		deck.add(new Tile(woods, village, 'B'));
-		deck.add(new Tile(plain, town, 'B'));
+		tempDeck.add(new Tile(lake, none, 'B'));
+		tempDeck.add(new Tile(plain, castle, 'B'));
+		tempDeck.add(new Tile(plain, village, 'B'));
+		tempDeck.add(new Tile(woods, village, 'B'));
+		tempDeck.add(new Tile(plain, town, 'B'));
 		
 		// set C - Woods Town, Plain, Plain Castle, Plain Village, Woods Castle
-		deck.add(new Tile(woods, town, 'C'));
-		deck.add(new Tile(plain, none, 'C'));
-		deck.add(new Tile(plain, castle, 'C'));
-		deck.add(new Tile(plain, village, 'C'));
-		deck.add(new Tile(woods, castle,'C'));
+		tempDeck.add(new Tile(woods, town, 'C'));
+		tempDeck.add(new Tile(plain, none, 'C'));
+		tempDeck.add(new Tile(plain, castle, 'C'));
+		tempDeck.add(new Tile(plain, village, 'C'));
+		tempDeck.add(new Tile(woods, castle,'C'));
 		
 		// set D - Plain Castle, Mountains, Woods Village, Plain Castle, Plain Village
-		deck.add(new Tile(plain, castle, 'D'));
-		deck.add(new Tile(mountains, none, 'D'));
-		deck.add(new Tile(woods, village, 'D'));
-		deck.add(new Tile(plain, castle, 'D'));
-		deck.add(new Tile(plain, village, 'D'));
+		tempDeck.add(new Tile(plain, castle, 'D'));
+		tempDeck.add(new Tile(mountains, none, 'D'));
+		tempDeck.add(new Tile(woods, village, 'D'));
+		tempDeck.add(new Tile(plain, castle, 'D'));
+		tempDeck.add(new Tile(plain, village, 'D'));
 		
 		// set E - Plain Castle, Woods Village, Plain Village, Woods Castle, Plain
-		deck.add(new Tile(plain, castle, 'E'));
-		deck.add(new Tile(woods, village, 'E'));
-		deck.add(new Tile(plain, village, 'E'));
-		deck.add(new Tile(woods, castle, 'E'));
-		deck.add(new Tile(plain, none, 'E'));
+		tempDeck.add(new Tile(plain, castle, 'E'));
+		tempDeck.add(new Tile(woods, village, 'E'));
+		tempDeck.add(new Tile(plain, village, 'E'));
+		tempDeck.add(new Tile(woods, castle, 'E'));
+		tempDeck.add(new Tile(plain, none, 'E'));
+		
+		shuffle(tempDeck);
 	}
 	
 	// randomize each tile, 
-	private void shuffle() {
+	private void shuffle(ArrayList<Tile> tempDeck) {
 		Random gen = new Random(); 
 		Tile temp;
 		int x = 0;
@@ -129,9 +130,9 @@ class PlayerTile {
 		for(int i = 4; i < 24;){
 			int p = 4 + gen.nextInt(5);
 			
-			temp = deck.get(p);
-			deck.add(p, deck.get(i));
-			deck.add(i, temp);
+			temp = tempDeck.get(p);
+			tempDeck.add(p, tempDeck.get(i));
+			tempDeck.add(i, temp);
 			x++;
 			
 			if(x == 3){
@@ -141,14 +142,17 @@ class PlayerTile {
 				if(i == 9 || i == 14 || i == 19)
 					set += 5;
 			}	
-		}		
+		}
+		
+		for(int j = 23; j >= 0; j--)
+			deck.push(tempDeck.get(j));
 	}
 	
 	// Draw a tile from the top of the deck and add it to the hand
 	public int draw() {
 		if(numTiles() < 0) {
 			if(handSize() < 2)
-				return addTile(deck.get(currentSet));
+				return addTile(deck.pop());
 		}
 		
 		return 1;
@@ -156,6 +160,6 @@ class PlayerTile {
 	
 	// Gather the current number of tiles in the deck
 	public int numTiles(){
-		return 24-currentSet;
+		return currentSet;
 	}
 }
