@@ -17,14 +17,17 @@ private class LocationList {
 		next = p;
 	}
 	
+	// get the x location
 	public int getX() { 
 		return x; 
 	}
 	
+	// get the y location
 	public int getY() { 
 	return y; 
 	}
 	
+	// returns null at the end of the list
 	public LocationList getNext() { 
 	return next; 
 	}
