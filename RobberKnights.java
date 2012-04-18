@@ -9,6 +9,6 @@
 
 class RobberKnights {
 	public static void main(String[] args) {
-		BoardGame play = new BoardGame();
+		GUI play = new GUI();
 	}
 }
