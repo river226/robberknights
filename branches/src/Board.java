@@ -128,7 +128,32 @@ class Board {
 		height = x;
 	}
 	
-	// Determine if a space is a valid spot or not
+	// Find all of the valid locations for the next move
+	public LocationList getValidMoves() {
+		LocationList l = null;
+		Tile[][] t = getGrid();
+		
+		for(int i = 0; i < getMax(); i++) {
+			for(int j = i; j < getMax(); j++) {
+				
+				// check verticle
+				if(t[i][j] == null) 
+					if(t[i+1][j] != null || t[i-1][j] != null || t[i][j+1] != null || t[i][j-1] != null) 
+						if(valid())
+							l = new LocationList(i,j,l);
+				
+				// check horizontal 
+				if(t[j][i] == null) 
+					if(t[j+1][i] != null || t[j-1][i] != null || t[j][i+1] != null || t[j][i-1] != null) 
+						if(valid())
+							l = new LocationList(j,i,l);
+			}
+		}
+
+		return l;
+	}
+	
+	// Determine if a space is a valid spot or not in realtion to the max width and height
 	public boolean valid(int x, int y) {
 		if(getHeight() == getMax() && (x > getRightX() || x < getLeftX()))
 			return false;
