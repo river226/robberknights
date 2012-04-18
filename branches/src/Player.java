@@ -146,6 +146,11 @@ class Player {
 		return name()
 	}
 	
+	// get the playerID number
+	public int getID() {
+		return id;
+	}
+	
 	// Get the number of knights left to play
 	public int remainingKnights() {
 		return remainingKnights;
