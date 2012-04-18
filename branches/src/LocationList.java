@@ -8,6 +8,7 @@
  */
 
 private class LocationList {
+
 	private int x, y;
 	private LocationList next;
 	
@@ -24,11 +25,11 @@ private class LocationList {
 	
 	// get the y location
 	public int getY() { 
-	return y; 
+		return y; 
 	}
 	
 	// returns null at the end of the list
 	public LocationList getNext() { 
-	return next; 
+		return next; 
 	}
 }
