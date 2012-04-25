@@ -1,6 +1,8 @@
 /**
  * Group 5 Robber Knights Game
  *
+ * Members: Jedidiah Johnson, Alex Sokol, Aaron Thrasher, Rebecca Rasmussen, Tony Dederich
+ *
  * The Player Class:
  *
  * The Player Class holds and manages the players deck, hand and knights 
@@ -48,12 +50,12 @@ class Player {
 		// player starts out with 30 knights
 		remainingKnights = 30;
 		
-		initialize();
+		Initialize();
 	}
 	
 	// initialize the deck deck
 	private void Initialize() {
-		ArrayList<Tile> tempDeck() = new ArrayList(0);
+		ArrayList<Tile> tempDeck = new ArrayList(0);
 		// for habitat    0 = none, 1 = castle, 2 = village, 3 = town
 		// for enviroment 0 = lake, 1 = plain, 2 = woods, 3 = mountains
 		int none = 0, castle = 1, village = 2, town = 3;
@@ -103,7 +105,7 @@ class Player {
 		int x = 0;
 		int set = 4;
 		
-		for(int i = 4; i < 24;){
+		for(int i = 4; i < 24; i++){
 			int p = 4 + gen.nextInt(5);
 			
 			temp = tempDeck.get(p);
@@ -131,19 +133,19 @@ class Player {
 	
 	// Get the Hand 
 	public Tile[] getHand() {
-		handsize = 0;
+		int handsize = 0;
 		
 		if(handSize() == 2)
-			return Tile[] temp = [hand.pop(), hand.pop()];
+			return new Tile[] {hand.pop(), hand.pop()};
 		else if(handSize() == 1)
-			return Tile[] temp = [hand.pop()];
+			return new Tile[] {hand.pop()};
 		else
 			return null;
 	}
 	
 	// get the players name
 	public String getName() {
-		return name()
+		return name;
 	}
 	
 	// get the playerID number
@@ -187,7 +189,7 @@ class Player {
 	
 	// Draw a tile from the top of the deck and add it to the hand
 	public int draw() {
-		if(numTiles() < 0) {
+		if(numTiles() > 0) {
 			if(handSize() < 2)
 				return addTile(deck.pop());
 		}
@@ -197,7 +199,20 @@ class Player {
 	
 	// Get the a tile from the hand and add a new tile
 	public Tile makeMove(int location) {
-		Tile t = playTile(location);
+		Tile t;
+		
+		if(location == 1 && handSize() > 1) {
+			t = hand.pop();
+		} 
+		else if(location == 2 && handSize() == 2) {
+			Tile temp = hand.pop();
+			t = hand.pop();
+			hand.push(t);
+		}
+		else 
+			return null;
+			
+		handSize--;
 		draw();
 		return t;
 	}
