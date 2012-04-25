@@ -1,6 +1,8 @@
 /**
  * Group 5 Robber Knights Game
  *
+ * Members: Jedidiah Johnson, Alex Sokol, Aaron Thrasher, Rebecca Rasmussen, Tony Dederich
+ *
  * The Turn Class:
  *
  * The Turn class manages all the steps and update for a specific move.
@@ -48,7 +50,7 @@ private class Turn extends Game {
 			movecount++;
 			totalTiles--;
 			
-			if(t.getHabitat().equals("castle");
+			if(t.getHabitat().equals("castle"));
 				return 1;
 				
 			return 0;

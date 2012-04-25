@@ -1,6 +1,8 @@
 /**
  * Group 5 Robber Knights Game
  *
+ * Members: Jedidiah Johnson, Alex Sokol, Aaron Thrasher, Rebecca Rasmussen, Tony Dederich
+ *
  * The Game Class:
  *
  * The Board class maintains the playfield, and the placement of tiles

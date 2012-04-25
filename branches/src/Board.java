@@ -1,6 +1,8 @@
 /**
  * Group 5 Robber Knights Game
  *
+ * Members: Jedidiah Johnson, Alex Sokol, Aaron Thrasher, Rebecca Rasmussen, Tony Dederich
+ *
  * The Board Class:
  *
  * The Board class maintains the playfield, and the placement of tiles
@@ -139,13 +141,13 @@ class Board {
 				// check verticle
 				if(t[i][j] == null) 
 					if(t[i+1][j] != null || t[i-1][j] != null || t[i][j+1] != null || t[i][j-1] != null) 
-						if(valid())
+						if(t[i][j].valid())
 							l = new LocationList(i,j,l);
 				
 				// check horizontal 
 				if(t[j][i] == null) 
 					if(t[j+1][i] != null || t[j-1][i] != null || t[j][i+1] != null || t[j][i-1] != null) 
-						if(valid())
+						if(t[j][i].valid())
 							l = new LocationList(j,i,l);
 			}
 		}
