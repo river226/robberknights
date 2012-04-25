@@ -1,13 +1,15 @@
 /**
  * Group 5 Robber Knights Game
  *
+ * Members: Jedidiah Johnson, Alex Sokol, Aaron Thrasher, Rebecca Rasmussen, Tony Dederich
+ *
  * The LocationList Class:
  *
  * simple list structure to fascilitate the transfer of a list of loctions
  * 
  */
 
-private class LocationList {
+class LocationList {
 
 	private int x, y;
 	private LocationList next;
