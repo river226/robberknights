@@ -1,6 +1,8 @@
 /**
  * Group 5 Robber Knights Game
  *
+ * Members: Jedidiah Johnson, Alex Sokol, Aaron Thrasher, Rebecca Rasmussen, Tony Dederich
+ *
  * The Tile Class:
  *
  * The tile class maintains it's type and maintains all knights that are 
@@ -113,16 +115,14 @@ class Tile {
 	}
 	
 	// Get the filepath for the image of the file
-	public string getImage() {
+	public String getImage() {
 		String name = ".png";
 		
 		name = getEnviroment() + name;
 		
 		name =  getHabitat() + "_" + name;
 		
-		color = topKnight();
-		
-		switch(color) {
+		switch(topKnight()) { // Color
 			case(1):
 				name = "red_" + name; break;
 			case(2):
@@ -131,7 +131,7 @@ class Tile {
 				name = "yellow_" + name; break;
 			case(4):
 				name = "green_" + name; break;
-			default
+			default :
 				name = "none_" + name; break;
 		}
 		
