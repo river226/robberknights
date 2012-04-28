@@ -8,7 +8,7 @@
  * The Turn class manages all the steps and update for a specific move.
  */
 
-private class Turn extends Game {
+class Turn extends Game {
 		private int x, y, dir, Knightsleft;
 		private int movecount;
 		private Player current;
