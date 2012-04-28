@@ -216,6 +216,7 @@ class Player {
 		draw();
 		return t;
 	}
+	
 	// Restore the hand after making the first move
 	public void firstMoveSet(Tile t) {
 		addTile(t);
