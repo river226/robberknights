@@ -46,10 +46,17 @@ class Game {
 	
 	// Get the Tiles from the player for the first move, and add them in a random order to the Playfield. update the the GUI, Board, and Each Player.
 	public Tile[][] firstMove() {
+		Tile[][] t = new Tile[numplayers][3];
+		
 		for(int i = 0; i < numplayers; i++) {
-			Tile t = null;
-			players[i].firstMoveSet(t);
+			Tile[] c = players[i].firstMoveGet();
+			
+			for(int j = 0; j < 3; j++) {
+				t[i][j] = c[j];
+			}
 		}
+		
+		return t;
 	}
 	
 	// Return the tile not played
