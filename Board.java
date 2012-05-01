@@ -8,16 +8,20 @@
  * The Board class maintains the playfield, and the placement of tiles
  * 
  */
+ 
+import java.util.Random;
 
 class Board {
 
 	private Tile[][] grid;
 	private int botY, topY, lefX, ritX, height, width; 
+	private int nump;
 	private final int max;
 	
 	// constructor, initialize variables
 	public Board(int playNum) {
-		switch(playNum) {
+		pnum = playNum;
+		switch(pnum) {
 		 case(2) : grid = new Tile[10][10]; // 8x8 with buffer on each side
 		 case(3) : grid = new Tile[11][11]; // 9x9 with buffer on each side
 		 default : grid = new Tile[12][12]; // 10x10 with buffer on each side
@@ -128,6 +132,38 @@ class Board {
 	// Set the width of the playfield
 	public void setHeight(int x) {
 		height = x;
+	}
+	
+	// Set up the board for the initial move
+	public Tile[][] setup(Tile[][] t) {
+		Random gen = new Random();
+		
+		for(int i = 0; i < 100; i++) {
+			int x1 = gen.nextInt(3);
+			int y1 = gen.nextInt(playnum);
+			int x2 = gen.nextInt(3);
+			int y2 = gen.nextInt(playnum);
+			Tile p = t[x1][y1];
+			t[x1][y1] = t[x2][y2];
+			t[x2][y2] = p;
+		}
+		
+		int slot = max/2;
+		int set = 4;
+		
+		for(int j = 0; j < 3; j++) {	
+			for(int k = 0; k < nump; k++) {
+				p = t[j][k];
+				if(p != null) {
+					grid[set][slot] = p;
+					slot++;
+				}
+			}
+			set++;
+			slot -= 2;
+		}
+		
+		return getGrid();
 	}
 	
 	// Find all of the valid locations for the next move

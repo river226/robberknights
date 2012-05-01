@@ -20,6 +20,7 @@ class Game {
 	public Game(int nump, String[] names) {
 		numplayers = nump;
 		c = 0;
+		turn = 0;
 		totalKnights = 120;
 		totalTiles = 96;
 		generatePlayfield();
@@ -46,25 +47,35 @@ class Game {
 	
 	// Get the Tiles from the player for the first move, and add them in a random order to the Playfield. update the the GUI, Board, and Each Player.
 	public Tile[][] firstMove() {
-		Tile[][] t = new Tile[numplayers][3];
-		
-		for(int i = 0; i < numplayers; i++) {
-			Tile[] c = players[i].firstMoveGet();
+		if(turn == 0) {
+			Tile[][] t = new Tile[numplayers][3];
 			
-			for(int j = 0; j < 3; j++) {
-				t[i][j] = c[j];
+			for(int i = 0; i < numplayers; i++) {
+				Tile[] c = players[i].firstMoveGet();
+				
+				for(int j = 0; j < 3; j++) {
+					t[i][j] = c[j];
+				}
 			}
+			
+			return t;
 		}
 		
-		return t;
+		return null;
 	}
 	
 	// Return the tile not played
 	public void returnToHand(int p, Tile t) {
-		if(turn == 0)
+		if(turn == 0) {
 			players[p].firstMoveSet(t);
-		
-		totalTiles -= 2;
+			totalTiles -= 2;
+		}
+	}
+	
+	// Place the Tiles on the board for the start of the game
+	public Tile[][] setUpBoard(Tile[][] t) {
+		if(turn == 0) { return playfield.setup(t); }
+		return null;
 	}
 	
 	// Manage the game including all updates
@@ -79,6 +90,8 @@ class Game {
 			c++;
 		else
 			c = 0;
+			
+		turn++;
 			
 		return move;
 		
@@ -153,7 +166,7 @@ class Game {
 			
 			movecount++;
 			totalTiles--;
-			
+			// add draw
 			if(t.getHabitat().equals("castle"))
 				return 1;
 				
