@@ -45,6 +45,11 @@ class Game {
 		return playfield.getGrid();
 	}
 	
+	// Gets the players name
+	public String getName(int i) {
+		return players[i].getName();
+	}
+	
 	// Get the Tiles from the player for the first move, and add them in a random order to the Playfield. update the the GUI, Board, and Each Player.
 	public Tile[][] firstMove() {
 		if(turn == 0) {
