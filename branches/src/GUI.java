@@ -1,4 +1,21 @@
+
+/**
+ *
+ * Group 5 Robber Knights Game
+ *
+ * Members: Jedidiah Johnson, Alex Sokol, Aaron Thrasher, Rebecca Rasmussen, Tony Dederich
+ *
+ * The GUI class:
+ *
+ * Implements the user facing portion of the program. It also functions as the driver for the entire game
+ * and listens for all input from the user, interpreting the appropriate calls to make. 
+ *
+ */
+=======
 import java.awt.*;
+>>>>>>> .r59
+
+import javax.imageio.ImageIO;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,9 +28,16 @@ import java.io.IOException;
 
 public class GUI implements ActionListener {
 
+
+	//GUI Components
+	private int grid = 12; // Defaults the grid size to 12x12
+    private JFrame window = new JFrame("Robber Knights");   
+=======
+
 	private int grid = 12;
 	//GUI Components
     private JFrame window = new JFrame("Robber Knights");
+>>>>>>> .r59
     
     private JPanel board =  new JPanel();
     private JPanel playerStatus = new JPanel();
@@ -47,10 +71,12 @@ public class GUI implements ActionListener {
 	private JLabel playerThree = new JLabel();
 	private JLabel playerFour = new JLabel();
     private int numPlayers = 2;
-    private RobberKnightsGame game;
+    private Game game;
+    private Tile[][] temp = new Tile[numPlayers][3];
+    private Tile[][] tempGrid;
+
     
-    
-  //Creates GUI
+    // Creates GUI
     public GUI() throws IOException
     {
     	JMenuItem newAction = new JMenuItem("Start Game");
@@ -63,12 +89,11 @@ public class GUI implements ActionListener {
     	window.setSize(800,650);                        
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         
-        BufferedImage titleScreen = ImageIO.read(new File("TitleScreen.bmp"));
+        BufferedImage titleScreen = ImageIO.read(new File("library/images/Logo/work.jpg")); // may need to add 'src/' to file path
         JLabel startScreen = new JLabel(new ImageIcon(titleScreen));
         window.setContentPane(startScreen);
      
         board.setLocation(0, 0);
-       
        
         board.setSize(new Dimension(600, 600));
         board.setLayout(new GridLayout(grid,grid));
@@ -131,15 +156,16 @@ public class GUI implements ActionListener {
         
         helpMenu.add(helpAction);
         helpMenu.add(aboutAction);
-        
+
         JPanel namePane = new JPanel();
     	JPanel radioPane = new JPanel();
     	
     	namePane.setLayout(new GridLayout(4,2));
     	radioPane.setLayout(new GridLayout(3,1));
     	
+    	//Creates the "New Game" Menu
     	menu.setSize(350,250);
-        menu.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         menu.setLayout(new GridLayout(2,1));
         menu.setResizable(false);
         
@@ -172,26 +198,23 @@ public class GUI implements ActionListener {
         menu.getContentPane().add(close);
         
         twoPlayers.setSelected(true);
-        playerThreeName.disable();
+        playerThreeName.setEditable(false);
         playerThreeName.setBackground(null);
-        playerFourName.disable();
+        playerFourName.setEditable(false);
         playerFourName.setBackground(null);
         
-        //Creates the new game menu
+        //Creates the functionality of the "New Game" Menu
+
         newAction.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             	
-            	
-      
-                
-              
                 twoPlayers.addActionListener(new ActionListener() 
                 {
 					public void actionPerformed(ActionEvent arg0) {
-						playerThreeName.disable();
+						playerThreeName.setEditable(false);
 						playerThreeName.setText(null);
 						playerThreeName.setBackground(null);
-						playerFourName.disable();
+						playerFourName.setEditable(false);
 						playerFourName.setText(null);
 						playerFourName.setBackground(null);
 						numPlayers = 2;
@@ -201,9 +224,9 @@ public class GUI implements ActionListener {
                 threePlayers.addActionListener(new ActionListener() 
                 {
 					public void actionPerformed(ActionEvent arg0) {
-						playerThreeName.enable();
+						playerThreeName.setEditable(true);
 						playerThreeName.setBackground(Color.WHITE);
-						playerFourName.disable();
+						playerFourName.setEditable(false);
 						playerFourName.setText(null);
 						playerFourName.setBackground(null);
 						numPlayers = 3;
@@ -213,9 +236,9 @@ public class GUI implements ActionListener {
                 fourPlayers.addActionListener(new ActionListener() 
                 {
 					public void actionPerformed(ActionEvent arg0) {
-						playerThreeName.enable();
+						playerThreeName.setEditable(true);
 						playerThreeName.setBackground(Color.WHITE);
-						playerFourName.enable();
+						playerFourName.setEditable(true);
 						playerFourName.setBackground(Color.WHITE);
 						numPlayers = 4;
 						
@@ -237,26 +260,39 @@ public class GUI implements ActionListener {
                 		playerNames[1] = playerTwoName.getText();
                 		playerNames[2] = playerThreeName.getText();
                 		playerNames[3] = playerFourName.getText();
-                		game = new RobberKnightsGame(numPlayers, playerNames);
-                		grid = game.board.getMax() + 2;
-                		gridButtons = new JButton[grid][grid];
+                		game = new Game(numPlayers, playerNames);
+                		grid = game.getBoard().length;
+                  		gridButtons = new JButton[grid][grid];
+                  		tempGrid = new Tile[grid][grid];
                 		board.setLayout(new GridLayout(grid,grid));
-                		setBoard();
-                		//window.setContentPane(board);
+                		setBoard();                		
                 		board.validate();
+                		playerNameField.setText(game.getName(0));
+                		temp = game.firstMove();
+                		for(int i = 0; i < numPlayers; i++)
+                		{
+                			game.returnToHand(i, temp[i][0]);
+                			temp[i][0] = null;
+                		}
+                		tempGrid = game.setUpBoard(temp);
+                		try {
+							repaint();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                		menu.dispose();
                 		
-                		menu.setVisible(false);
                 		
                 	}
                 });
-                
+
                 //Hides the new game menu
                 close.addActionListener(new ActionListener() 
                 {
                 	public void actionPerformed(ActionEvent arg0) 
                 	{
-                		menu.setVisible(false);
-                	
+                		menu.dispose();
                 	}
                 });
                 
@@ -296,7 +332,28 @@ public class GUI implements ActionListener {
         }
     }
 
-    
+    public void repaint() throws IOException
+    {
+    	for (int x = 0; x < grid; x++)
+    	{
+    		for (int y = 0; y < grid; y++)
+    		{
+    			if(tempGrid[x][y] != null)
+    			{
+    				gridButtons[x][y].setText("");
+        			gridButtons[x][y].setName("");
+                    gridButtons[x][y].setEnabled(true);
+                    gridButtons[x][y].setIcon(new ImageIcon(ImageIO.read(new File(tempGrid[x][y].getImage()))));
+                   
+    			}
+    		}
+    	}
+    }
+    public void startGame()
+    {
+    	game.nextTurn();
+    	
+    }
   //Resets the board
     public void reset() 
     {
@@ -382,16 +439,15 @@ public class GUI implements ActionListener {
         	{
         		if (gridButtons[x][y] == a.getSource())
         		{        			
-        			
         			if (x == 0 || y == 0)
         			{
-        				tempArray = shift(x, y);
+        				//tempArray = shift(x, y);
         				x = tempArray[0];
         				y = tempArray[1];
         				
         			}
         			//gridButtons[x][y].setName("used");
-        			modAdjacent(x,y);
+        			//modAdjacent(x,y);
         		}
         	}
         }
@@ -401,22 +457,21 @@ public class GUI implements ActionListener {
         	{
         		if (gridButtons[x][y] == a.getSource())
         		{        			
-        			
         			if (x == grid - 1 || y == grid - 1)
         			{
-        				tempArray = shift(x, y);
+        				//tempArray = shift(x, y);
         				x = tempArray[0];
         				y = tempArray[1];
        
         			}
         			//gridButtons[x][y].setName("used");
-        			modAdjacent(x,y);
+        			//modAdjacent(x,y);
         		}
         	}
         }
         
     }
-   
+   /*
     private int[] shift(int x, int y) 
     {
     	int flag;
@@ -577,6 +632,8 @@ public class GUI implements ActionListener {
     	tempArray[1] = y;
     	return tempArray;
     }
+    */
+    /*
     private JButton[][] initBoard(JButton[][] board)
     {
     	for(int j = 0 ; j < grid ; j++)
@@ -589,6 +646,8 @@ public class GUI implements ActionListener {
 		return board;
     	
     }
+    */
+    /*
     private void modAdjacent(int x, int y)
     {
     	if (gridButtons[x-1][y].getName() != "used")
@@ -608,7 +667,7 @@ public class GUI implements ActionListener {
 			gridButtons[x][y+1].setEnabled(true);
 		}
     }
-
+	*/
 
 
 	//Runs the Robber Knights Game
@@ -617,7 +676,3 @@ public class GUI implements ActionListener {
        new GUI();
     }
 }
-
-
-    
-        
