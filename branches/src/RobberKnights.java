@@ -11,6 +11,9 @@
 
 class RobberKnights {
 	public static void main(String[] args) {
-		GUI play = new GUI();
+		try {
+			GUI play = new GUI();
+		} catch (IOException e)
+		{}
 	}
 }
