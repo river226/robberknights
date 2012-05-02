@@ -31,12 +31,14 @@ class Player {
 	private int remainingKnights;
 	private final String name;
 	private Stack<Tile> hand;
-	private Stack<Tile> deck = new Stack();
+	private Stack<Tile> deck;
 	
 	// constructor, initialize variables
 	public Player(int num, String n) {
 		id = num;
 		name = n;
+		hand = new Stack();
+		deck = new Stack();
 		
 		if(id == 1)
 			color = "Red";
