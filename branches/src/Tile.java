@@ -106,6 +106,7 @@ class Tile {
 	
 	// Return the current winning Knight
 	public int topKnight() {
+		if(numKnights == 0) return -1;
 		return knights[numKnights - 1];
 	}
 	
@@ -135,7 +136,7 @@ class Tile {
 				name = "none_" + name; break;
 		}
 		
-		name = "/library/images/tiles/" + getEnviroment()  + "/" + name;
+		name = "library/images/tiles/" + getEnviroment()  + "/" + name; // may need to add 'src/' to file path
 		
 		return name;
 	}
