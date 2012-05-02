@@ -20,8 +20,8 @@ class Board {
 	
 	// constructor, initialize variables
 	public Board(int playNum) {
-		pnum = playNum;
-		switch(pnum) {
+		nump = playNum;
+		switch(nump) {
 		 case(2) : grid = new Tile[10][10]; break; // 8x8 with buffer on each side
 		 case(3) : grid = new Tile[11][11]; break; // 9x9 with buffer on each side
 		 default : grid = new Tile[12][12]; break;// 10x10 with buffer on each side
@@ -134,15 +134,16 @@ class Board {
 		height = x;
 	}
 	
+<<<<<<< .mine
 	// Set up the board for the initial move
 	public Tile[][] setup(Tile[][] t) {
 		Random gen = new Random();
 		
 		for(int i = 0; i < 100; i++) {
-			int x1 = gen.nextInt(3);
-			int y1 = gen.nextInt(playnum);
-			int x2 = gen.nextInt(3);
-			int y2 = gen.nextInt(playnum);
+			int y1 = gen.nextInt(3);
+			int x1 = gen.nextInt(nump);
+			int y2 = gen.nextInt(3);
+			int x2 = gen.nextInt(nump);
 			Tile p = t[x1][y1];
 			t[x1][y1] = t[x2][y2];
 			t[x2][y2] = p;
@@ -153,10 +154,12 @@ class Board {
 		
 		for(int j = 0; j < 3; j++) {	
 			for(int k = 0; k < nump; k++) {
-				p = t[j][k];
+				Tile p = t[k][j];
+				System.out.println(set);
 				if(p != null) {
 					grid[set][slot] = p;
 					slot++;
+					System.out.println(slot);
 				}
 			}
 			set++;
