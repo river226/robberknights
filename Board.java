@@ -134,15 +134,21 @@ class Board {
 		height = x;
 	}
 	
-<<<<<<< .mine
 	// Set up the board for the initial move
 	public Tile[][] setup(Tile[][] t) {
 		Random gen = new Random();
-		
-		for(int i = 0; i < 100; i++) {
-			int y1 = gen.nextInt(3);
+		for(int l = 0; l < nump; l++) {	// straighten array into nump x 2
+			for(int p = 0;p  < 3; p++) {
+				if(t[l][p] == null && p != 2){
+					t[l][p] = t[l][p+1];
+					t[l][p+1] = null;
+				}
+			}
+		}
+		for(int i = 0; i < 100; i++) { // randomize tiles
+			int y1 = gen.nextInt(2);
 			int x1 = gen.nextInt(nump);
-			int y2 = gen.nextInt(3);
+			int y2 = gen.nextInt(2);
 			int x2 = gen.nextInt(nump);
 			Tile p = t[x1][y1];
 			t[x1][y1] = t[x2][y2];
@@ -151,19 +157,24 @@ class Board {
 		
 		int slot = max/2;
 		int set = 4;
-		
-		for(int j = 0; j < 3; j++) {	
-			for(int k = 0; k < nump; k++) {
-				Tile p = t[k][j];
-				System.out.println(set);
-				if(p != null) {
-					grid[set][slot] = p;
+		if(gen.nextInt(100) > 50) { // randomize placement: vertical
+			for(int j = 0; j < nump; j++) {	// place tiles on grid
+				for(int k = 0; k < 2; k++) {
+					grid[set][slot] = t[j][k];
 					slot++;
-					System.out.println(slot);
 				}
+				set++;
+				slot -= 2;
 			}
-			set++;
-			slot -= 2;
+		} else { // randomize placement: horizontal
+			for(int j = 0; j < nump; j++) {	// place tiles on grid
+				for(int k = 0; k < 2; k++) {
+					grid[slot][set] = t[j][k];
+					slot++;
+				}
+				set++;
+				slot -= 2;
+			}
 		}
 		
 		return getGrid();
