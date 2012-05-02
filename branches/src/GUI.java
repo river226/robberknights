@@ -11,15 +11,10 @@
  * and listens for all input from the user, interpreting the appropriate calls to make. 
  *
  */
-=======
+
 import java.awt.*;
->>>>>>> .r59
-
-import javax.imageio.ImageIO;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,13 +27,6 @@ public class GUI implements ActionListener {
 	//GUI Components
 	private int grid = 12; // Defaults the grid size to 12x12
     private JFrame window = new JFrame("Robber Knights");   
-=======
-
-	private int grid = 12;
-	//GUI Components
-    private JFrame window = new JFrame("Robber Knights");
->>>>>>> .r59
-    
     private JPanel board =  new JPanel();
     private JPanel playerStatus = new JPanel();
     private JDialog menu = new JDialog();
