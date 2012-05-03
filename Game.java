@@ -167,7 +167,9 @@ class Game {
 		// play a tile onto the board
 		// return 0 for no castle, return 1 for castle
 		public int playTile(Tile t, int x, int y) {
-			playfield.placeTile(t, x, y);
+			if(playfield.placeTile(t, x, y) == 1){
+				return -1;
+			}
 			
 			movecount++;
 			totalTiles--;
