@@ -188,7 +188,7 @@ class Board {
 		for(int i = 0; i < getMax(); i++) {
 			for(int j = i; j < getMax(); j++) {
 				
-				// check verticle
+				// check vertical
 				if(t[i][j] == null) 
 					if(t[i+1][j] != null || t[i-1][j] != null || t[i][j+1] != null || t[i][j-1] != null) 
 						if(t[i][j].valid())
