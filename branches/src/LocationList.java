@@ -9,28 +9,65 @@
  * 
  */
 
+/**Hold a linked list of locations.
+ * 
+ * LocationList(int, int);
+ * int getX();
+ * int getY();
+ * boolean isNext();
+ * LocationList getNext();
+ *
+ */
 class LocationList {
 
 	private int x, y;
 	private LocationList next;
 	
+	/**Constructor for LocationList, linked list style
+	 * 
+	 * @param x1 = int x coordinate on grid
+	 * @param y1 = int y coordinate on grid
+	 * @param p = LocationList of next spot
+	 */
 	public LocationList(int x1, int y1, LocationList p) {
 		x = x1;
 		y = y1;
 		next = p;
 	}
 	
-	// get the x location
+	/**Get the x location
+	 * 
+	 * @return x location
+	 */
 	public int getX() { 
 		return x; 
 	}
 	
-	// get the y location
+	/**Get the y location
+	 * 
+	 * @return y location
+	 */
 	public int getY() { 
 		return y; 
 	}
 	
-	// returns null at the end of the list
+/**Determine whether or not there is another 
+ * LocationList after the current one
+ * 
+ * @return true or false
+ */
+	public Boolean isNext() {
+		if(next != null)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**Returns the next LocationList
+	 * 
+	 * @return Next LocationList
+	 */
 	public LocationList getNext() { 
 		return next; 
 	}
