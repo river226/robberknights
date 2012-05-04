@@ -69,6 +69,7 @@ public class GUI implements ActionListener {
     private JButton begin = new JButton("Begin");
     private JButton playerHandTile[] = new JButton[2];
     private int playerHandTileSelect = 0;
+    private LocationList tempList;
     // Creates GUI
     public GUI() throws IOException
     {
@@ -545,10 +546,15 @@ public class GUI implements ActionListener {
     }
     public void validMoves()
     {
+    	tempList = game.move.getValidMoves();
+    	System.out.println(tempList.toString());
+    	/*
     	for(;game.move.getValidMoves().isNext() != false; game.move.getValidMoves().getNext())
     	{
+    		System.out.println(game.move.getValidMoves().toString());
     		gridButtons[game.move.getValidMoves().getX()][game.move.getValidMoves().getY()].setEnabled(true);
     	}
+    	*/
     }
     //Resets the board
     public void reset() 
