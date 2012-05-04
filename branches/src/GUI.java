@@ -1,4 +1,3 @@
-
 /**
  *
  * Group 5 Robber Knights Game
@@ -15,6 +14,7 @@
 import java.awt.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,7 +32,7 @@ public class GUI implements ActionListener {
     private JDialog menu = new JDialog();
     private JDialog tilePick = new JDialog();
     private JButton gridButtons[][] = new JButton[grid][grid];  
-    JButton initTile[][] = new JButton[4][3];
+    private JButton initTile[][] = new JButton[4][3];
     private JButton close = new JButton("Close");
     private JButton newGame = new JButton("Start Game");
     private ButtonGroup group = new ButtonGroup();
@@ -64,7 +64,11 @@ public class GUI implements ActionListener {
     private Game game;
     private Tile[][] temp = new Tile[numPlayers][3];
     private Tile[][] tempGrid;
-    
+    private Tile[] tempHand = new Tile[2];
+    private int tilesPicked[] = new int[4];
+    private JButton begin = new JButton("Begin");
+    private JButton playerHandTile[] = new JButton[2];
+    private int playerHandTileSelect = 0;
     // Creates GUI
     public GUI() throws IOException
     {
@@ -78,7 +82,7 @@ public class GUI implements ActionListener {
         window.setSize(800,650);                        
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         
-        BufferedImage titleScreen = ImageIO.read(new File("src/library/images/Logo/robnight600.jpg")); // may need to add 'src/' to file path
+        BufferedImage titleScreen = ImageIO.read(new File("src/library/images/Logo/robnight600.png")); // may need to add 'src/' to file path
 		window.setIconImage(new ImageIcon("src/library/images/icon/R_icon_small.png").getImage()); // may need to add 'src/' to file path
         JLabel startScreen = new JLabel(new ImageIcon(titleScreen));
         window.setContentPane(startScreen);
@@ -121,13 +125,20 @@ public class GUI implements ActionListener {
                 handLabel.setBounds(80, 115, 40, 25);
                 playerStatus.add(handLabel);
                 
-                JButton tileOne = new JButton("Tile 1");
-                tileOne.setBounds(35, 150, 60, 60);
-                playerStatus.add(tileOne);
+                for(int y = 0; y < 2; y++)
+                {
+                        playerHandTile[y] = new JButton();
+                        playerHandTile[y].addActionListener(this);            
+                        Font f = new Font("comicbd.ttf", 1, 20);    
+                        playerHandTile[y].setFont(f);
+                }                
                 
-                JButton tileTwo = new JButton("Tiles 2");
-                tileTwo.setBounds(100, 150, 60, 60);
-                playerStatus.add(tileTwo);
+                playerHandTile[0].setBounds(35, 150, 60, 60);
+                playerStatus.add(playerHandTile[0]);
+                
+                
+                playerHandTile[1].setBounds(100, 150, 60, 60);
+                playerStatus.add(playerHandTile[1]);
                 back.setBounds(5, 220, 90, 25);
                 playerStatus.add(back);
                 endTurn.setBounds(100, 220, 90, 25);
@@ -217,11 +228,15 @@ public class GUI implements ActionListener {
         
         for(int x = 0; x < 4; x++)
         {
-        	for(int y = 0; y < 3; y++)
-        	{
-        		initTile[x][y] = new JButton();
-        		tilePick.getContentPane().add(initTile[x][y]);
-        	}
+			for(int y = 0; y < 3; y++)
+			{
+				initTile[x][y] = new JButton();
+				initTile[x][y].addActionListener(this);            
+				Font f = new Font("comicbd.ttf", 1, 20);    
+				initTile[x][y].setFont(f); 
+				tilePick.getContentPane().add(initTile[x][y]);
+			}
+		tilesPicked[x] = 0;
         }
        
         initTile[3][2].setBounds(235, 200, 60, 60);
@@ -241,12 +256,17 @@ public class GUI implements ActionListener {
         initTile[0][0].setBounds(105, 5, 60, 60);
         
         JButton tileBack = new JButton("Back");
-        tileBack.setBounds(160, 300, 100, 25);
+        tileBack.setBounds(155, 300, 100, 25);
         tilePick.getContentPane().add(tileBack);
         
-        JButton begin = new JButton("Begin");
-        begin.setBounds(45, 300, 100, 25);
+        
+        begin.setBounds(50, 300, 100, 25);
         tilePick.getContentPane().add(begin);
+        begin.setEnabled(false);
+        
+        JButton reset = new JButton("Reset Selection");
+        reset.setBounds(80, 270, 150, 25);
+        tilePick.getContentPane().add(reset);
         tilePick.setResizable(false);
         
         
@@ -308,17 +328,42 @@ public class GUI implements ActionListener {
                                 temp = game.firstMove();
                                 for(int i = 0; i < numPlayers; i++)
                                 {
-                               	 for(int j = 0; j < 3; j++)
-                               	 {
-                               		 try {
-											initTile[i][j].setIcon(new ImageIcon(ImageIO.read(new File(temp[i][j].getImage()))));
-										} catch (IOException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-                               	 }
-                                        game.returnToHand(i, temp[i][0]);
-                                        temp[i][0] = null;
+                                 for(int j = 0; j < 3; j++)
+                                 {
+                                         try {
+                                                                                        initTile[i][j].setIcon(new ImageIcon(ImageIO.read(new File(temp[i][j].getImage()))));
+                                                                                } catch (IOException e) {
+                                                                                        // TODO Auto-generated catch block
+                                                                                        e.printStackTrace();
+                                                                                }
+                                 }
+                                        
+                                }
+                                switch (numPlayers)
+                                {
+                                	case 2: 
+                                		for(int x = 0; x < 3; x++)
+                                		{
+                                			initTile[2][x].setVisible(false);
+                                			initTile[3][x].setVisible(false);
+                                		}
+                                		break;
+                                	case 3:
+                                		for(int x = 0; x < 3; x++)
+                                		{
+                                			initTile[2][x].setVisible(true);
+                                			initTile[3][x].setVisible(false);
+                                			
+                                		}
+                                		break;
+                                	default:
+                                		for(int x = 0; x < 3; x++)
+                                		{
+                                			initTile[2][x].setVisible(true);
+                                			initTile[3][x].setVisible(true);
+                                			
+                                		}
+                                		break;                                		
                                 }
                                 menu.setVisible(false);
                                 tilePick.setVisible(true);
@@ -338,16 +383,34 @@ public class GUI implements ActionListener {
                 menu.setVisible(true);
             }
         });
+        //Displays the initial tiles picked.
         begin.addActionListener(new ActionListener() 
         {
                                 public void actionPerformed(ActionEvent arg0) {
-                                	 window.getContentPane().add(board);
+                                	                                	
+                                	for(int i = 0; i < numPlayers; i++)
+                                	{
+                                		for(int j = 0; j < 3; j++)
+                                		{
+                                		
+                                			if(initTile[i][j].isEnabled())
+                                			{
+                                				game.returnToHand(i, temp[i][j]);
+                                				temp[i][j] = null;
+                                			}
+                                		}
+                                		
+                                		
+                                	}
+                                     window.getContentPane().add(board);
                                      window.getContentPane().add(playerStatus);
                                      board.removeAll();
                                      setBoard();                             
                                      board.validate();
                                      playerNameField.setText(game.getName(0));
+                                     
                                      tempGrid = game.setUpBoard(temp);
+                                     
                                      try {
                                                              repaint();
                                                      } catch (IOException e) {
@@ -357,17 +420,38 @@ public class GUI implements ActionListener {
                                      board.repaint();
                                      playerStatus.repaint();
                                      tilePick.dispose();
-                                     menu.dispose();   
+                                     menu.dispose(); 
+                                     resetInitialTile();
+                                     try {
+										startGame();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
                                 }       
         });
+        //Goes back to the menu screen.
         tileBack.addActionListener(new ActionListener() 
         {
                                 public void actionPerformed(ActionEvent arg0) {
-                                	tilePick.dispose();   	
-                                	menu.setVisible(true);
-                                       	
+                                        tilePick.dispose();     
+                                        menu.setVisible(true);
+                                        resetInitialTile();
+                                        begin.setEnabled(false);
+                                        
+                                        
                                 }       
         });
+        //Resets the initial tiles selected.
+        reset.addActionListener(new ActionListener() 
+        {
+                                public void actionPerformed(ActionEvent arg0) {
+                                	
+                                	resetInitialTile(); 
+                                	begin.setEnabled(false);
+                                }       
+        });
+        
         
         //Closes program
         exitAction.addActionListener(new ActionListener() 
@@ -377,6 +461,20 @@ public class GUI implements ActionListener {
                         System.exit(0);
                 }
         });
+        
+      //Delects tile selected to play
+        back.addActionListener(new ActionListener() 
+        {
+                public void actionPerformed(ActionEvent arg0)
+                {
+                	for(int x = 0; x < 2; x++)
+                	{
+                	playerHandTile[x].setEnabled(true);
+                	}
+                	playerHandTileSelect--;
+                }
+        });
+
         
         //setBoard();                   
         
@@ -401,6 +499,18 @@ public class GUI implements ActionListener {
                 }
         }
     }
+    
+    public void resetInitialTile()
+    {
+    	for(int x = 0; x < 4; x++)
+        {
+                for(int y = 0; y < 3; y++)
+                {
+                        initTile[x][y].setEnabled(true);
+                }
+                tilesPicked[x] = 0;
+        }
+    }
 
     public void repaint() throws IOException
     {
@@ -419,12 +529,28 @@ public class GUI implements ActionListener {
                 }
         }
     }
-    public void startGame()
+    public void startGame() throws IOException
     {
-        game.nextTurn();
+    	
+    	
+    	game.nextTurn();    	
+    	tempHand = game.move.getHand();
+    	for(int x = 0; x < 2; x++)
+    	{
+    		playerHandTile[x].setIcon(new ImageIcon(ImageIO.read(new File(tempHand[x].getImage()))));
+    	}
+    	validMoves();
+    	
         
     }
-  //Resets the board
+    public void validMoves()
+    {
+    	for(;game.move.getValidMoves().isNext() != false; game.move.getValidMoves().getNext())
+    	{
+    		gridButtons[game.move.getValidMoves().getX()][game.move.getValidMoves().getY()].setEnabled(true);
+    	}
+    }
+    //Resets the board
     public void reset() 
     {
         for (int x = 0; x < grid; x++)
@@ -438,71 +564,87 @@ public class GUI implements ActionListener {
                 }
         }
         
-        gridButtons[6][6].setText("U");
-        gridButtons[6][6].setEnabled(false);
-        gridButtons[6][6].setBackground(null);
-        gridButtons[6][6].setName("used");
-        
-        gridButtons[5][6].setText("U");
-        gridButtons[5][6].setEnabled(false);
-        gridButtons[5][6].setBackground(null);
-        gridButtons[5][6].setName("used");
-        
-        gridButtons[6][5].setText("U");
-        gridButtons[6][5].setEnabled(false);
-        gridButtons[6][5].setBackground(null);
-        gridButtons[6][5].setName("used");
-        
-        gridButtons[5][5].setText("U");
-        gridButtons[5][5].setEnabled(false);
-        gridButtons[5][5].setBackground(null);
-        gridButtons[5][5].setName("used");
-        
-        gridButtons[4][5].setText("");
-        gridButtons[4][5].setEnabled(true);
-        gridButtons[4][5].setBackground(null);
-        
-        gridButtons[5][4].setText("");
-        gridButtons[5][4].setEnabled(true);
-        gridButtons[5][4].setBackground(null);
-        
-        gridButtons[4][6].setText("");
-        gridButtons[4][6].setEnabled(true);
-        gridButtons[4][6].setBackground(null);
-        
-        gridButtons[5][7].setText("");
-        gridButtons[5][7].setEnabled(true);
-        gridButtons[5][7].setBackground(null);
-        
-        gridButtons[6][4].setText("");
-        gridButtons[6][4].setEnabled(true);
-        gridButtons[6][4].setBackground(null);
-        
-        gridButtons[7][5].setText("");
-        gridButtons[7][5].setEnabled(true);
-        gridButtons[7][5].setBackground(null);
-        
-        gridButtons[7][6].setText("");
-        gridButtons[7][6].setEnabled(true);
-        gridButtons[7][6].setBackground(null);
-        
-        gridButtons[6][7].setText("");
-        gridButtons[6][7].setEnabled(true);
-        gridButtons[6][7].setBackground(null);
-        
         
     }
   //Selects the square you want to go
     public void actionPerformed(ActionEvent a) 
     {
         //Draws the letter on the button, disable the button and enables adjacent.
-        
+        /*
         JButton pressedButton = (JButton)a.getSource();
         pressedButton.setText("U");
         pressedButton.setName("used");
         pressedButton.setEnabled(false);
+        */
         int tempArray[] = new int[2];
         
+        for(int x = 0; x < 2; x++)
+        {
+        	if (playerHandTile[x] == a.getSource())
+        	{
+        		if(playerHandTileSelect < 1)
+        		{
+        		playerHandTile[x].setEnabled(false);
+        		playerHandTileSelect++;
+        		}
+        		
+        	}
+        }
+        for(int x = 0; x < numPlayers; x++)
+        {
+        	for(int y = 0; y < 3; y++)
+        	{
+        		if (initTile[x][y] == a.getSource())
+        		{
+        			if (tilesPicked[x] < 2)
+        			{
+        				if(initTile[x][y].isEnabled())
+        				{
+        					initTile[x][y].setEnabled(false);
+        					tilesPicked[x]++;
+        				}
+        			}
+        			
+        		}
+        	}
+        	
+        }
+        switch (numPlayers)
+        {
+        case 2: 
+        	if (tilesPicked[0] == 2 && tilesPicked[1] == 2)
+        	{
+        		begin.setEnabled(true);
+        	}
+        	else
+    		{
+    			begin.setEnabled(false);
+    		}
+        	break;
+        case 3: 
+        	if (tilesPicked[0] == 2 && tilesPicked[1] == 2 && tilesPicked[2] == 2)
+        	{
+        		begin.setEnabled(true);
+        	}
+        	else
+    		{
+    			begin.setEnabled(false);
+    		}
+        	break;
+        default: 
+        	if (tilesPicked[0] == 2 && tilesPicked[1] == 2 && tilesPicked[2] == 2 && tilesPicked[3] == 2)
+        	{
+        		begin.setEnabled(true);
+        	}
+        	else
+    		{
+    			begin.setEnabled(false);
+    		}
+        	break;
+        	
+        }
+		
+		
         for(int x = 0; x < grid - 1; x++)
         {
                 for(int y = 0; y < grid - 1; y++)
@@ -539,7 +681,7 @@ public class GUI implements ActionListener {
                         }
                 }
         }
-        
+     
     }
 
 
