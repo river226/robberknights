@@ -65,11 +65,15 @@ public class GUI implements ActionListener {
     private Tile[][] temp = new Tile[numPlayers][3];
     private Tile[][] tempGrid;
     private Tile[] tempHand = new Tile[2];
+    private Tile selectedHandTile;
+    private Tile unselectedHandTile;
     private int tilesPicked[] = new int[4];
     private JButton begin = new JButton("Begin");
     private JButton playerHandTile[] = new JButton[2];
     private int playerHandTileSelect = 0;
     private LocationList tempList;
+    private Boolean castlePlayed = false;
+    
     // Creates GUI
     public GUI() throws IOException
     {
@@ -84,7 +88,7 @@ public class GUI implements ActionListener {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         
         BufferedImage titleScreen = ImageIO.read(new File("src/library/images/Logo/robnight600.png")); // may need to add 'src/' to file path
-		window.setIconImage(new ImageIcon("src/library/images/icon/R_icon_small.png").getImage()); // may need to add 'src/' to file path
+                window.setIconImage(new ImageIcon("src/library/images/icon/R_icon_small.png").getImage()); // may need to add 'src/' to file path
         JLabel startScreen = new JLabel(new ImageIcon(titleScreen));
         window.setContentPane(startScreen);
      
@@ -229,15 +233,15 @@ public class GUI implements ActionListener {
         
         for(int x = 0; x < 4; x++)
         {
-			for(int y = 0; y < 3; y++)
-			{
-				initTile[x][y] = new JButton();
-				initTile[x][y].addActionListener(this);            
-				Font f = new Font("comicbd.ttf", 1, 20);    
-				initTile[x][y].setFont(f); 
-				tilePick.getContentPane().add(initTile[x][y]);
-			}
-		tilesPicked[x] = 0;
+                for(int y = 0; y < 3; y++)
+                {
+                        initTile[x][y] = new JButton();
+                        initTile[x][y].addActionListener(this);            
+                        Font f = new Font("comicbd.ttf", 1, 20);    
+                        initTile[x][y].setFont(f); 
+                        tilePick.getContentPane().add(initTile[x][y]);
+                }
+                tilesPicked[x] = 0;
         }
        
         initTile[3][2].setBounds(235, 200, 60, 60);
@@ -547,14 +551,11 @@ public class GUI implements ActionListener {
     public void validMoves()
     {
     	tempList = game.move.getValidMoves();
-    	System.out.println(tempList.toString());
-    	/*
-    	for(;game.move.getValidMoves().isNext() != false; game.move.getValidMoves().getNext())
+    	for(;tempList.isNext();tempList = tempList.getNext())
     	{
-    		System.out.println(game.move.getValidMoves().toString());
-    		gridButtons[game.move.getValidMoves().getX()][game.move.getValidMoves().getY()].setEnabled(true);
+    		gridButtons[tempList.getX()][tempList.getY()].setEnabled(true);
     	}
-    	*/
+    	gridButtons[tempList.getX()][tempList.getY()].setEnabled(true);
     }
     //Resets the board
     public void reset() 
@@ -583,6 +584,27 @@ public class GUI implements ActionListener {
         pressedButton.setEnabled(false);
         */
         int tempArray[] = new int[2];
+        if(playerHandTileSelect == 1)
+        {
+        	for(int x = 0; x < grid; x++)
+        	{
+        		for(int y = 0; y < grid; y++)
+        		{
+        			if(gridButtons[x][y] == a.getSource())
+        			{
+        				try {
+							gridButtons[x][y].setIcon(new ImageIcon(ImageIO.read(new File(selectedHandTile.getImage()))));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        				castlePlayed = game.move.makeMove(selectedHandTile, x, y, unselectedHandTile);
+        				validMoves();
+        			}
+        		}
+        	}
+        	
+        }
         
         for(int x = 0; x < 2; x++)
         {
@@ -590,8 +612,17 @@ public class GUI implements ActionListener {
         	{
         		if(playerHandTileSelect < 1)
         		{
-        		playerHandTile[x].setEnabled(false);
-        		playerHandTileSelect++;
+	        		playerHandTile[x].setEnabled(false);
+	        		selectedHandTile = tempHand[x];
+	        		playerHandTileSelect++;
+        			if (x == 0)
+        			{
+        				unselectedHandTile = tempHand[1];
+        			}
+        			else
+        			{
+        				unselectedHandTile = tempHand[0];
+        			}
         		}
         		
         	}
