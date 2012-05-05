@@ -98,7 +98,7 @@ class Tile {
 
     	/**Sets knights onto the tile
     	 * 
-    	 * @param token = array of ints ea. := player number with max => size >= min
+    	 * @param token = ?
     	 * @throws Exception
     	 */
         public void setKnight(int[] token) throws Exception {
