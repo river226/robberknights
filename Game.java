@@ -170,8 +170,9 @@ class Game {
         
         public class Turn {
                 private int x, y, dir, Knightsleft;
-                private int movecount;
+                private int movecount, tilesLeft;
                 private Player current;
+				private boolean castlePlayed = false;
                 
                 
         		/**Turn Constructor.
@@ -183,6 +184,7 @@ class Game {
                         Knightsleft = 0;
                         movecount = 0;
                         current = p;
+						tilesLeft = current.numTiles();
                 }
                 
         		/**Set direction of the movement
@@ -207,7 +209,21 @@ class Game {
                 public void endMove() {
                         dir = -1;
                         Knightsleft = 0;
+						castlePlayed = false;
                 }
+				
+				/** End the current Players turn
+				 */
+				public void endTurn(Tile[] ret) {
+						if(ret.length == 1) {
+								returnTile(ret[0]);
+						}else if(ret.length == 2) {
+								returnTile(ret[0]);
+								returnTile(ret[1]);
+						}
+						movecount = 3;
+						castlePlayed = false;
+				}
                 
         		/**Return a tile from the GUI to the hand
         		 * 
@@ -273,6 +289,21 @@ class Game {
                                 playfield.getGrid()[x][y].setKnight(tokens);
                         } catch (Exception e) {} 
                 }
+				
+				/** Set up for Knight movement
+				 */
+				public boolean startKnightMove() {
+						if(castlePlayed && totalKnights > 0) {
+								if(totalKnights >= 5) Knightsleft = 5;
+								else Knightsleft = totalKnights;
+								return true;
+						}
+						return false;
+				}
+				
+				public int getKnightsLeft() {
+						return Knightsleft;
+				}
                 
 
         		/**Get current player's hand to display
@@ -284,6 +315,8 @@ class Game {
                         y = 0;
                         dir = -1;
                         Knightsleft = 0;
+						tilesLeft = current.numTiles();
+						castlePlayed = false;
                 
                         if(movecount < 3)
                                 return current.getHand();
@@ -299,6 +332,9 @@ class Game {
                         Tile[][] b = playfield.getGrid();
                         LocationList l = null;
                         
+						if(!castlePlayed)
+							return l;
+						
                         if(dir == -1) {
                                 if(b[x+1][y] != null && b[x+1][y].valid())
                                         l = new LocationList(x+1, y, l) ;
@@ -321,5 +357,33 @@ class Game {
                         
                         return l;
                 }
+							
+				// Play a tile to the board and return 1 to the hand
+				public boolean makeMove(Tile place, int x, int y, Tile returnT) {
+						this.x = x;
+						this.y = y;
+						
+						if(place != null) {
+								playfield.placeTile(place, x, y);
+								if(place.getHabitat().equals("castle")) 
+										castlePlayed = true;
+								totalTiles--;
+						}
+						if(returnT != null) {
+								current.addTile(returnT);
+								if(tilesLeft >= 1)
+										current.draw();
+						} else if(returnT == null && current.handSize() == 0) {
+								if(tilesLeft > 1) {
+										current.draw();
+										current.draw();
+								} else if(tilesLeft > 0) 
+										current.draw();
+						}
+						
+						movecount++;
+						
+						return castlePlayed;
+				}
         }
 }
