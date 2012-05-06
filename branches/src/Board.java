@@ -31,6 +31,11 @@ class Board {
 		}
 
 		max = grid.length - 2;
+		ritX = grid.length/2;
+		topY = ritX;
+		botY = topY;
+		lefX = botY;
+		reset();
 	}
 
 
@@ -184,10 +189,10 @@ class Board {
 
 	/**Set the wideth of the playfield
 	 * 
-	 * @param x = int height number
+	 * @param y = int height number
 	 */
-	public void setHeight(int x) {
-		height = x;
+	public void setHeight(int y) {
+		height = y;
 	}
 
 	/**Set ups board in initial configuration with 
@@ -222,7 +227,7 @@ class Board {
 		if(gen.nextInt(100) > 50) { // randomize placement: vertical
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
-					grid[set][slot] = t[j][k];
+					placeTile(t[j][k], set, slot);
 					slot++;
 				}
 				set++;
@@ -231,7 +236,7 @@ class Board {
 		} else { // randomize placement: horizontal
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
-					grid[slot][set] = t[j][k];
+					placeTile(t[j][k], slot, set);
 					slot++;
 				}
 				set++;
@@ -250,35 +255,45 @@ class Board {
 		LocationList l = null;
 		Tile[][] t = getGrid();
 
-		for(int i = 0; i < getMax(); i++) {
-			for(int j = i; j <= getMax(); j++) {
+		for(int i = 0; i < getMax() + 1; i++) {
+			for(int j = i; j <= getMax() + 1; j++) {
 
 				// check verticle
-				if(t[i][j] == null && i != 0) {
-					if(t[i+1][j] != null || t[i-1][j] != null || t[i][j+1] != null || t[i][j-1] != null) 
+				if(t[i][j] == null) {
+					if(i != getMax()+1 && t[i+1][j] != null) {
 						if(valid(i,j))
 							l = new LocationList(i,j,l);
-				} else if(t[i][j] == null && i == 0) {
-					if(t[i+1][j] != null || t[i][j+1] != null) 
+					} else if(j != getMax()+1 && t[i][j+1] != null) {
 						if(valid(i,j))
 							l = new LocationList(i,j,l);
+					} else if(i != 0 && t[i-1][j] != null) {
+						if(valid(i,j))
+							l = new LocationList(i,j,l);
+					} else if(j != 0 && t[i][j-1] != null) {
+						if(valid(i,j))
+							l = new LocationList(i,j,l);
+					} 
 				}
 
 				// check horizontal 
-				if(j != i) {
-					if(t[j][i] == null && i != 0) {
-						if(t[j+1][i] != null || t[j-1][i] != null || t[j][i+1] != null || t[j][i-1] != null) 
-							if(valid(j,i))
-								l = new LocationList(j,i,l);
-					} else if(t[j][i] == null && j == 0) {
-						if(t[j+1][i] != null || t[j][i+1] != null) 
-							if(valid(j,i))
-								l = new LocationList(j,i,l);
-					}
+				if(t[j][i] == null) {
+					if(j != getMax()+1 && t[j+1][i] != null) {
+						if(valid(j,i))
+							l = new LocationList(j,i,l);
+					} else if(i != getMax()+1 && t[j][i+1] != null) {
+						if(valid(j,i))
+							l = new LocationList(j,i,l);
+					} else if(j != 0 && t[j-1][i] != null) {
+						if(valid(j,i))
+							l = new LocationList(j,i,l);
+					} else if(i != 0 && t[j][i-1] != null) {
+						if(valid(j,i))
+							l = new LocationList(j,i,l);
+					} 
 				}
 
 			}
-		}
+	}
 
 		return l;
 	}
@@ -290,9 +305,9 @@ class Board {
 	 * @return boolean true = valid, false = invalid
 	 */
 	public boolean valid(int x, int y) {
-		if(getHeight() == getMax() && (x > getRightX() || x < getLeftX()))
+		if(getWidth() == getMax()-1 && (x > getRightX() || x < getLeftX()))
 			return false;
-		else if(getWidth() == getMax() && (y > getBottomY() || y < getTopY()))
+		else if(getHeight() == getMax()-1 && (y > getBottomY() || y < getTopY()))
 			return false;
 		else
 			return true;
