@@ -43,7 +43,7 @@ class Player {
 		name = n;
 		hand = new Stack<Tile>();
 		deck = new Stack<Tile>();
-		currentSet = 0;
+		currentSet = 24;
 		handSize = 0;
 
 		if(id == 1)
@@ -233,8 +233,8 @@ class Player {
 	public int draw() {
 		if(numTiles() > 0) {
 			if(handSize() < 2)
-				return addTile(deck.pop());
 				currentSet--;
+				return addTile(deck.pop());
 		}
 
 		return 1;
