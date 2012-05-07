@@ -23,6 +23,36 @@ class Game {
 	 * 
 	 * @param nump = int Number of players
 	 * @param names = String[] of names
+	 * @param ages = int[] of player ages
+	 */
+	public Game(int nump, String[] names, int[] ages) {
+		numplayers = nump;
+		c = 0;
+		turn = 0;
+		totalKnights = 120;
+		totalTiles = 96;
+		generatePlayfield();
+		
+		String[] temp = new String[nump];
+		
+		for(int i = 0; i < nump; i++) {
+			int t = 0;
+			for(int j = 0; j < nump; j++) {
+				if(ages[j] < ages[t])
+					t = j;
+			}
+			temp[i] = names[t];
+			ages[t] = 200;
+		}
+		
+		generatePlayers(temp);
+	}
+	
+	/**Constructor of Game. Initializes elements of the GUI
+	 * so that the game can start
+	 * 
+	 * @param nump = int Number of players
+	 * @param names = String[] of names
 	 */
 	public Game(int nump, String[] names) {
 		numplayers = nump;
@@ -169,8 +199,8 @@ class Game {
 	 */
 
 	public class Turn {
-		private int x, y, dir, Knightsleft;
-		private int movecount, tilesLeft;
+		private int x, y, dir, Knightsleft, playerKnights;
+		private int movecount;
 		private Player current;
 		private boolean castlePlayed = false;
 
@@ -184,7 +214,7 @@ class Game {
 			Knightsleft = 0;
 			movecount = 0;
 			current = p;
-			tilesLeft = current.numTiles();
+			playerKnights = current.remainingKnights();
 		}
 
 		/**Set direction of the movement
@@ -248,34 +278,36 @@ class Game {
 		 * @param n int of number of knights
 		 */
 		public void playKnights(int x, int y, int n) {
-			int[] tokens = new int[n];
+			if(castlePlayed && getKnightsLeft() >= n) {
+				int[] tokens = new int[n];
 
-			for(int i = 0; i < n; i++)
-				tokens[i] = current.getID();
+				for(int i = 0; i < n; i++)
+					tokens[i] = current.getID();
 
-			totalKnights -= n;
-			Knightsleft -= n;
+				totalKnights -= n;
+				Knightsleft -= n;
 
-			if(dir == 0) // right
-			x++;
-			else if(dir == 1) // left
-			x--;
-			else if(dir == 2) // up
-			y--;
-			else if(dir == 3) // down
-			y++;
+				if(dir == 0) // right
+					x++;
+				else if(dir == 1) // left
+					x--;
+				else if(dir == 2) // up
+					y--;
+				else if(dir == 3) // down
+					y++;
 
-			try{
-				playfield.getGrid()[x][y].setKnight(tokens);
-			} catch (Exception e) {} 
+				try{
+					playfield.getGrid()[x][y].setKnight(tokens);
+				} catch (Exception e) {} 
+			}
 		}
 
 		/** Set up for Knight movement
 		 */
 		public boolean startKnightMove() {
-			if(castlePlayed && totalKnights > 0) {
-				if(totalKnights >= 5) Knightsleft = 5;
-				else Knightsleft = totalKnights;
+			if(castlePlayed && playerKnights > 0) {
+				if(playerKnights >= 5) Knightsleft = 5;
+				else Knightsleft = playerKnights;
 				return true;
 			}
 			return false;
@@ -295,7 +327,6 @@ class Game {
 			y = 0;
 			dir = -1;
 			Knightsleft = 0;
-			tilesLeft = current.numTiles();
 			castlePlayed = false;
 
 			if(movecount < 3)
@@ -355,13 +386,13 @@ class Game {
 			}
 			if(returnT != null) {
 				current.addTile(returnT);
-				if(tilesLeft >= 1)
+				if(current.numTiles() >= 1)
 					current.draw();
 			} else if(returnT == null && current.handSize() == 0) {
-				if(tilesLeft > 1) {
+				if(current.numTiles() > 1) {
 					current.draw();
 					current.draw();
-				} else if(tilesLeft > 0) 
+				} else if(current.numTiles() > 0) 
 					current.draw();
 			}
 
