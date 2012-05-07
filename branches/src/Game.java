@@ -233,26 +233,6 @@ class Game {
 			current.addTile(t);
 		}
 
-
-		/**Place tile onto board
-		 * 
-		 * @param t: Tile to be placed
-		 * @param x: int x coordinate
-		 * @param y: int y coordinate
-		 * @return int 1 for castle, 0 for other
-		 */
-		public int playTile(Tile t, int x, int y) {
-			playfield.placeTile(t, x, y);
-
-			movecount++;
-			totalTiles--;
-			// add draw
-			if(t.getHabitat().equals("castle"))
-				return 1;
-
-			return 0;
-		}
-
 		/**Get the minimum knights to play on tile
 		 * 
 		 * @return int minimum knights
@@ -357,7 +337,11 @@ class Game {
 
 			return l;
 		}
-
+		
+		public String getName() {
+			return current.getName();
+		}
+		
 		// Play a tile to the board and return 1 to the hand
 		public boolean makeMove(Tile place, int x, int y, Tile returnT) {
 			this.x = x;

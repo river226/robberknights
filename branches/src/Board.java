@@ -14,7 +14,7 @@ import java.util.Random;
 class Board {
 
 	private Tile[][] grid;
-	private int botY, topY, lefX, ritX, height, width; 
+	private int ritY, lefY, topX, botX, height, width; 
 	private int nump;
 	private final int max;
 
@@ -31,10 +31,10 @@ class Board {
 		}
 
 		max = grid.length - 2;
-		ritX = grid.length/2;
-		topY = ritX;
-		botY = topY;
-		lefX = botY;
+		botX = grid.length/2;
+		lefY = botX;
+		ritY = lefY;
+		topX = ritY;
 		reset();
 	}
 
@@ -51,15 +51,15 @@ class Board {
 
 			grid[x][y] = t;
 
-			if(x > getRightX())
-				setRightX(x);
-			else if(x < getLeftX())
-				setLeftX(x);
+			if(x > getBottomX())
+				setBottomX(x);
+			else if(x < getTopX())
+				setTopX(x);
 
-			if(y > getBottomY())
-				setBottomY(y);
-			else if(y < getTopY())
-				setTopY(y);
+			if(y > getRightY())
+				setRightY(y);
+			else if(y < getLeftY())
+				setLeftY(y);
 
 			boardFixCheck();
 
@@ -81,24 +81,24 @@ class Board {
 	 * ???
 	 */
 	public void reset() {
-		setHeight(getBottomY() - getTopY());
-		setWidth(getRightX() - getLeftX());
+		setHeight(getRightY() - getLeftY());
+		setWidth(getBottomX() - getTopX());
 	}
 
 	/**Retrieve the top tile row
 	 * 
 	 * @return int top row number
 	 */
-	public int getTopY() {
-		return topY;
+	public int getLeftY() {
+		return lefY;
 	}
 
 	/**Retrieve the bottom tile row
 	 * 
 	 * @return int bottom row number
 	 */
-	public int getBottomY() {
-		return botY;
+	public int getRightY() {
+		return ritY;
 	}
 
 
@@ -106,16 +106,16 @@ class Board {
 	 * 
 	 * @return int leftmost row number
 	 */
-	public int getLeftX() {
-		return lefX;
+	public int getTopX() {
+		return topX;
 	}
 
 	/**Retrieve the rightmost tile row
 	 * 
 	 * @return int rightmost row number
 	 */
-	public int getRightX() {
-		return ritX;
+	public int getBottomX() {
+		return botX;
 	}
 
 	/**Retrieve the width of the play field
@@ -147,8 +147,8 @@ class Board {
 	 * 
 	 * @param x = int top row number
 	 */
-	public void setTopY(int x) {
-		topY = x;
+	public void setLeftY(int x) {
+		lefY = x;
 		reset();
 	}
 
@@ -156,8 +156,8 @@ class Board {
 	 * 
 	 * @param x = int bottom row number
 	 */
-	public void setBottomY(int x) {
-		botY = x;
+	public void setRightY(int x) {
+		ritY = x;
 		reset();
 	}
 
@@ -165,8 +165,8 @@ class Board {
 	 * 
 	 * @param x = int leftmost column number
 	 */
-	public void setLeftX(int x) {
-		lefX = x;
+	public void setTopX(int x) {
+		topX = x;
 		reset();
 	}
 
@@ -174,8 +174,8 @@ class Board {
 	 * 
 	 * @param x = int rightmost column number
 	 */
-	public void setRightX(int x) {
-		ritX = x;
+	public void setBottomX(int x) {
+		botX = x;
 		reset();
 	}
 
@@ -305,9 +305,9 @@ class Board {
 	 * @return boolean true = valid, false = invalid
 	 */
 	public boolean valid(int x, int y) {
-		if(getWidth() == getMax()-1 && (x > getRightX() || x < getLeftX()))
+		if(getWidth() == getMax()-1 && (x > getBottomX() || x < getTopX()))
 			return false;
-		else if(getHeight() == getMax()-1 && (y > getBottomY() || y < getTopY()))
+		else if(getHeight() == getMax()-1 && (y > getRightY() || y < getLeftY()))
 			return false;
 		else
 			return true;
@@ -317,66 +317,67 @@ class Board {
 	/**Shifts board if needed
 	 */
 	private void boardFixCheck() {
-		if(getTopY() == 0) {
-			int c = (getMax() + 2) - getBottomY()/2;
+		if(getLeftY() == 0) {
+			int c = 1;
 			moveField(3, c);
-			setTopY(getTopY() - c);
-			setBottomY(getBottomY() - c);
+			setLeftY(getLeftY() - c);
+			setRightY(getRightY() - c);
+			reset();
 		}
-		else if(getBottomY() == getMax() + 2) {
-			int c = (getTopY()/2);
+		else if(getRightY() == getMax() + 1) {
+			int c = 1;
 			moveField(2, c);
-			setTopY(getTopY()+ c);
-			setBottomY(getBottomY() + c);
+			setLeftY(getLeftY()+ c);
+			setRightY(getRightY() + c);
+			reset();
 		}
 
-		if(getLeftX() == 0) {
-			int c = (getMax() + 2) - getRightX()/2;
+		if(getTopX() == 0) {
+			int c = 1;
 			moveField(1, c);
-			setLeftX(getLeftX() + c);
-			setRightX(getRightX() + c);
+			setTopX(getTopX() + c);
+			setBottomX(getBottomX() + c);
+			reset();
 		}
-		else if(getRightX() == getMax() + 2) {
-			int c = (getLeftX()/2);
+		else if(getBottomX() == getMax() + 1) {
+			int c = 1;
 			moveField(0, c);
-			setLeftX(getLeftX() - c);
-			setRightX(getRightX() - c);
+			setTopX(getTopX() - c);
+			setBottomX(getBottomX() - c);
+			reset();
 		}
 	}
 
 	/**Moves the playfield
 	 * 
-	 * @param dir 0 = left, 1 = right, 2 = up, 3 = down
+	 * @param dir 0 = Up, 1 = Down, 2 = Left, 3 = Right
 	 * @param dis distance to be shifted
 	 */
 	private void moveField(int dir, int dis) {
 		if(dir == 0) {
-			for(int i = getLeftX(); i <= getRightX(); i++) {
-				for(int j = getTopY(); j <= getBottomY(); j++) {
+			for(int i = getTopX(); i <= getBottomX(); i++) {
+				for(int j = getLeftY(); j <= getRightY(); j++) {
 					grid[i - dis][j] = grid[i][j];
 					grid[i][j] = null;
 				}
 			}
-		}
-		else if(dir == 1) {
-			for(int i = getRightX(); i <= getLeftX(); i--) {
-				for(int j = getTopY(); j <= getBottomY(); j++) {
+		} else if(dir == 1) {
+			for(int i = getBottomX(); i <= getTopX(); i--) {
+				for(int j = getLeftY(); j <= getRightY(); j++) {
 					grid[i + dis][j] = grid[i][j];
 					grid[i][j] = null;
 				}
 			}
-		}
-		else if(dir == 2) {
-			for(int i =  getTopY(); i <= getBottomY(); i--) {
-				for(int j = getLeftX(); j <= getRightX(); j++) {
+		} else if(dir == 2) {
+			for(int i =  getRightY(); i <= getLeftY(); i--) {
+				for(int j = getTopX(); j <= getBottomX(); j++) {
 					grid[j][i - dis] = grid[i][j];
 					grid[i][j] = null;
 				}
 			}
-		}
-		else {
-			for(int i =  getBottomY(); i <= getTopY(); i++) {
-				for(int j = getLeftX(); j <= getRightX(); j++) {
+		} else {
+			for(int i =  getLeftY(); i <= getRightY(); i++) {
+				for(int j = getTopX(); j <= getBottomX(); j++) {
 					grid[j][i + dis] = grid[i][j];
 					grid[i][j] = null;
 				}
