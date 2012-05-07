@@ -25,7 +25,7 @@ class Board {
 	public Board(int playNum) {
 		nump = playNum;
 		switch(nump) {
-		case(2) : grid = new Tile[10][10]; break; // 8x8 with buffer on each side
+		case(2) : grid = new Tile[9][9]; break; // 8x8 with buffer on each side
 		case(3) : grid = new Tile[11][11]; break; // 9x9 with buffer on each side
 		default : grid = new Tile[12][12]; break;// 10x10 with buffer on each side
 		}
