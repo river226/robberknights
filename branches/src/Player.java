@@ -41,8 +41,8 @@ class Player {
 	public Player(int num, String n) {
 		id = num;
 		name = n;
-		hand = new Stack();
-		deck = new Stack();
+		hand = new Stack<Tile>();
+		deck = new Stack<Tile>();
 		currentSet = 0;
 		handSize = 0;
 
@@ -64,7 +64,7 @@ class Player {
 	/**Creates player deck
 	 */
 	private void Initialize() {
-		ArrayList<Tile> tempDeck = new ArrayList(0);
+		ArrayList<Tile> tempDeck = new ArrayList<Tile>(0);
 		// for habitat    0 = none, 1 = castle, 2 = village, 3 = town
 		// for enviroment 0 = lake, 1 = plain, 2 = woods, 3 = mountains
 		int none = 0, castle = 1, village = 2, town = 3;
@@ -115,7 +115,6 @@ class Player {
 		Random gen = new Random();
 		Tile temp;
 		int x = 0;
-		int set = 4;
 
 		for(int i = 4; i < 24; i++){
 			int p = 4 + gen.nextInt(5);
@@ -128,9 +127,6 @@ class Player {
 			if(x == 3){
 				i++;
 				x = 0;
-
-				if(i == 9 || i == 14 || i == 19)
-					set += 5;
 			}      
 		}
 
@@ -154,11 +150,13 @@ class Player {
 	 */
 	public Tile[] getHand() {
 
-		if(handSize() == 2)
+		if(handSize() == 2) {
+			handSize = 0;
 			return new Tile[] {hand.pop(), hand.pop()};
-		else if(handSize() == 1)
+		} else if(handSize() == 1) {
+			handSize = 0;
 			return new Tile[] {hand.pop()};
-		else
+		} else
 			return null;
 	}
 
@@ -236,35 +234,11 @@ class Player {
 		if(numTiles() > 0) {
 			if(handSize() < 2)
 				return addTile(deck.pop());
+				currentSet--;
 		}
 
 		return 1;
 	}
-
-	/**???
-	 * 
-	 * @param location = ???
-	 * @return tile to add
-	 */
-	public Tile makeMove(int location) {
-		Tile t;
-
-		if(location == 1 && handSize() > 1) {
-			t = hand.pop();
-		}
-		else if(location == 2 && handSize() == 2) {
-			Tile temp = hand.pop();
-			t = hand.pop();
-			hand.push(t);
-		}
-		else
-			return null;
-
-		handSize--;
-		draw();
-		return t;
-	}
-
 
 	/**Add tile to hand
 	 * 
