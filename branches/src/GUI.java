@@ -558,14 +558,12 @@ public class GUI implements ActionListener {
         public void newTurn() throws IOException
         {
 
-        		deselect();
                 game.nextTurn(); 
                 playerNameField.setText(game.move.getName());
                 updateHand();
-                validMoves(game.move.getValidMoves());
-
 
         }
+        
         //Disables current enabled buttons on the board and hand
         public void disable()
         {
@@ -648,6 +646,13 @@ public class GUI implements ActionListener {
 	                    playerHandTile[x].setEnabled(true);
 	            }
         	}
+        	for (int x = 0; x < grid; x++)
+            {
+                    for (int y = 0; y < grid; y++)
+                    {
+                    	gridButtons[x][y].setEnabled(gridButtons[x][y].getIcon() != null);
+                    }
+            }
         }
         //Selects the square you want to go
         public void actionPerformed(ActionEvent a) 
@@ -708,12 +713,12 @@ public class GUI implements ActionListener {
                                                 		else{
                                                         try {
 	                                                        	updateHand();
+	                                                        	deselect();
 	        													repaint();
 	        												} catch (IOException e) {
 	        													// TODO Auto-generated catch block
 	        													e.printStackTrace();
 	        												}
-	                                                        validMoves(game.move.getValidMoves());
                                                 		}
                                                 }
                                                 
@@ -730,6 +735,7 @@ public class GUI implements ActionListener {
                         {
                                 if(playerHandTileSelect < 1)
                                 {
+                                		validMoves(game.move.getValidMoves());
                                         playerHandTile[x].setEnabled(false);
                                         selectedHandTile = tempHand[x];
                                         playerHandTileSelect++;
