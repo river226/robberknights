@@ -25,16 +25,12 @@ class Board {
 	public Board(int playNum) {
 		nump = playNum;
 		switch(nump) {
-		case(2) : grid = new Tile[9][9]; break; // 8x8 with buffer on each side
+		case(2) : grid = new Tile[9][9]; break; // 7x7 with buffer on each side
 		case(3) : grid = new Tile[11][11]; break; // 9x9 with buffer on each side
 		default : grid = new Tile[12][12]; break;// 10x10 with buffer on each side
 		}
 
 		max = grid.length - 2;
-		botX = grid.length/2;
-		lefY = botX;
-		ritY = lefY;
-		topX = ritY;
 		reset();
 	}
 
@@ -225,6 +221,8 @@ class Board {
 		int slot = max/2;
 		int set = 4;
 		if(gen.nextInt(100) > 50) { // randomize placement: vertical
+			lefY = set;
+			topX = slot;
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
 					placeTile(t[j][k], set, slot);
@@ -233,7 +231,11 @@ class Board {
 				set++;
 				slot -= 2;
 			}
+			ritY = set;
+			botX = slot;
 		} else { // randomize placement: horizontal
+			lefY = slot;
+			topX = set;
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
 					placeTile(t[j][k], slot, set);
@@ -242,6 +244,8 @@ class Board {
 				set++;
 				slot -= 2;
 			}
+			ritY = slot;
+			botX = set;
 		}
 
 		return getGrid();
@@ -369,17 +373,17 @@ class Board {
 				}
 			}
 		} else if(dir == 2) {
-			for(int i =  getRightY(); i <= getLeftY(); i--) {
+			for(int i =  getLeftY(); i <= getRightY() ; i++) {
 				for(int j = getTopX(); j <= getBottomX(); j++) {
-					grid[j][i - dis] = grid[i][j];
-					grid[i][j] = null;
+					grid[j][i - dis] = grid[j][i];
+					grid[j][i] = null;
 				}
 			}
 		} else {
 			for(int i =  getLeftY(); i <= getRightY(); i++) {
 				for(int j = getTopX(); j <= getBottomX(); j++) {
-					grid[j][i + dis] = grid[i][j];
-					grid[i][j] = null;
+					grid[j][i + dis] = grid[j][i];
+					grid[j][i] = null;
 				}
 			}
 		}

@@ -38,11 +38,11 @@ class Game {
 		for(int i = 0; i < nump; i++) {
 			int t = 0;
 			for(int j = 0; j < nump; j++) {
-				if(ages[j] < ages[t])
+				if(ages[j] > ages[t])
 					t = j;
 			}
 			temp[i] = names[t];
-			ages[t] = 200;
+			ages[t] = 0;
 		}
 		
 		generatePlayers(temp);
@@ -153,14 +153,11 @@ class Game {
 	 */
 	public void nextTurn() { 
 		move = null;
-
-		if(totalTiles > 0 || totalKnights > 0)
-			move = new Turn(players[c]);
-
-		if(c<numplayers)                
-			c++;
-		else
+		if(c == numplayers)                
 			c = 0;
+		
+		if(totalTiles > 0 || totalKnights > 0)
+			move = new Turn(players[c++]);
 
 		turn++;
 
@@ -215,6 +212,18 @@ class Game {
 			movecount = 0;
 			current = p;
 			playerKnights = current.remainingKnights();
+		}
+		
+		public String getReminingKnights() {
+			return String.valueOf(current.remainingKnights());
+		}
+		
+		public String getRemainingTiles() {
+			return String.valueOf(current.numTiles());
+		}
+		
+		public int getCurrentMove() {
+			return movecount;
 		}
 
 		/**Set direction of the movement
@@ -277,7 +286,7 @@ class Game {
 		 * @param y int y coordinate
 		 * @param n int of number of knights
 		 */
-		public void playKnights(int x, int y, int n) {
+		public void playKnights(int x1, int y1, int n) {
 			if(castlePlayed && getKnightsLeft() >= n) {
 				int[] tokens = new int[n];
 
@@ -297,7 +306,7 @@ class Game {
 					y++;
 
 				try{
-					playfield.getGrid()[x][y].setKnight(tokens);
+					playfield.getGrid()[x1][y1].setKnight(tokens);
 				} catch (Exception e) {} 
 			}
 		}
@@ -374,12 +383,15 @@ class Game {
 		}
 		
 		// Play a tile to the board and return 1 to the hand
-		public boolean makeMove(Tile place, int x, int y, Tile returnT) {
-			this.x = x;
-			this.y = y;
+		public boolean makeMove(Tile place, int x1, int y1, Tile returnT) {
+			this.x = x1;
+			this.y = y1;
+			
+			if(playerKnights < current.remainingKnights())
+				current.playKnights(playerKnights);
 
 			if(place != null) {
-				playfield.placeTile(place, x, y);
+				playfield.placeTile(place, x1, y1);
 				if(place.getHabitat().equals("castle")) 
 					castlePlayed = true;
 				totalTiles--;
