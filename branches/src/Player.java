@@ -74,7 +74,7 @@ class Player {
 		// set E - Plain Castle, Woods Village, Plain Village, Woods Castle, Plain
 		tempDeck.add(new Tile(plain, castle, 'E'));
 		tempDeck.add(new Tile(woods, village, 'E'));
-		tempDeck.add(new Tile(plain, village, 'E'));
+		tempDeck.add(new Tile(plain, town, 'E'));
 		tempDeck.add(new Tile(woods, castle, 'E'));
 		tempDeck.add(new Tile(plain, none, 'E'));
 		shuffle(tempDeck);
@@ -85,7 +85,7 @@ class Player {
 		tempDeck.add(new Tile(mountains, none, 'D'));
 		tempDeck.add(new Tile(woods, village, 'D'));
 		tempDeck.add(new Tile(plain, castle, 'D'));
-		tempDeck.add(new Tile(plain, village, 'D'));
+		tempDeck.add(new Tile(plain, town, 'D'));
 		shuffle(tempDeck);
 		tempDeck = new ArrayList<Tile>(0);
 
@@ -231,9 +231,10 @@ class Player {
 	 */
 	public int draw() {
 		if(numTiles() > 0) {
-			if(handSize() < 2)
+			if(handSize() < 2){
 				currentSet--;
-			return addTile(deck.pop());
+				return addTile(deck.pop());
+			}
 		}
 
 		return 1;

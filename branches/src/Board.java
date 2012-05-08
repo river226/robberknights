@@ -231,7 +231,7 @@ class Board {
 				set++;
 				slot -= 2;
 			}
-			ritY = slot+2;
+			ritY = slot+1;
 			botX = set;
 		} else { // randomize placement: horizontal
 			lefY = set;
@@ -245,7 +245,7 @@ class Board {
 				slot -= 2;
 			}
 			ritY = set;
-			botX = slot + 2;
+			botX = slot + 1;
 		}
 
 		return getGrid();
@@ -309,9 +309,9 @@ class Board {
 	 * @return boolean true = valid, false = invalid
 	 */
 	public boolean valid(int x, int y) {
-		if(getWidth() == getMax()-1 && (x > getBottomX() || x < getTopX()))
+		if(getWidth() == getMax() - 1 && (x > getBottomX() || x < getTopX()))
 			return false;
-		else if(getHeight() == getMax()-1 && (y > getRightY() || y < getLeftY()))
+		else if(getHeight() == getMax() - 1 && (y > getRightY() || y < getLeftY()))
 			return false;
 		else
 			return true;

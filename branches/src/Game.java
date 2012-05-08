@@ -218,6 +218,10 @@ class Game {
 			return String.valueOf(current.remainingKnights());
 		}
 		
+		public String getColor() {
+			return current.getColor();
+		}
+		
 		public String getRemainingTiles() {
 			return String.valueOf(current.numTiles());
 		}
@@ -355,7 +359,9 @@ class Game {
 			if(!castlePlayed)
 				return l;
 
-			if(dir == -1) {
+			if(b[x][y].topKnight() < 0) {
+				l = new LocationList(x, y, l);
+			} else if(dir == -1) {
 				if(b[x+1][y] != null && b[x+1][y].valid())
 					l = new LocationList(x+1, y, l) ;
 				if(b[x][y-1] != null && b[x][y-1].valid())
