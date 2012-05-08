@@ -360,7 +360,7 @@ class Game {
 					l = new LocationList(x+1, y, l) ;
 				if(b[x][y-1] != null && b[x][y-1].valid())
 					l = new LocationList(x, y-1, l);
-				if(b[x][y-1] != null && b[x][y+1].valid())
+				if(b[x][y+1] != null && b[x][y+1].valid())
 					l = new LocationList(x, y+1, l);
 				if(b[x-1][y] != null && b[x-1][y].valid())
 					l = new LocationList(x-1, y, l);
@@ -409,6 +409,7 @@ class Game {
 			}
 
 			movecount++;
+			dir = -1;
 
 			return castlePlayed;
 		}

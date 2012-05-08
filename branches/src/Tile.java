@@ -91,7 +91,7 @@ class Tile {
 	 * @return bool
 	 */
 	public boolean valid() {
-		if(habitat != 0 && habitat != -1 && minKnight() <= 4 - numKnights)
+		if(enviroment > 0  && minKnight() <= 4 - numKnights)
 			return true;
 		return false;
 	}
