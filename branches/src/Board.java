@@ -221,8 +221,8 @@ class Board {
 		int slot = max/2;
 		int set = 4;
 		if(gen.nextInt(100) > 50) { // randomize placement: vertical
-			lefY = slot;
-			topX = set;
+			lefY = set;
+			topX = slot;
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
 					placeTile(t[j][k], set, slot);
@@ -231,11 +231,11 @@ class Board {
 				set++;
 				slot -= 2;
 			}
-			ritY = slot+1;
-			botX = set;
+			ritY = set;
+			botX = slot;
 		} else { // randomize placement: horizontal
-			lefY = set;
-			topX = slot;
+			lefY = slot;
+			topX = set;
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
 					placeTile(t[j][k], slot, set);
@@ -244,8 +244,8 @@ class Board {
 				set++;
 				slot -= 2;
 			}
-			ritY = set;
-			botX = slot + 1;
+			ritY = slot;
+			botX = set;
 		}
 
 		return getGrid();
@@ -309,9 +309,9 @@ class Board {
 	 * @return boolean true = valid, false = invalid
 	 */
 	public boolean valid(int x, int y) {
-		if(getWidth() == getMax() - 1 && (x > getBottomX() || x < getTopX()))
+		if(getWidth() == getMax()-1 && (x > getBottomX() || x < getTopX()))
 			return false;
-		else if(getHeight() == getMax() - 1 && (y > getRightY() || y < getLeftY()))
+		else if(getHeight() == getMax()-1 && (y > getRightY() || y < getLeftY()))
 			return false;
 		else
 			return true;
