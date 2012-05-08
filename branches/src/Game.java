@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 /**
  * Group 5 Robber Knights Game
  *
@@ -38,11 +40,11 @@ class Game {
 		for(int i = 0; i < nump; i++) {
 			int t = 0;
 			for(int j = 0; j < nump; j++) {
-				if(ages[j] < ages[t])
+				if(ages[j] > ages[t])
 					t = j;
 			}
 			temp[i] = names[t];
-			ages[t] = 200;
+			ages[t] = 0;
 		}
 		
 		generatePlayers(temp);
@@ -218,6 +220,10 @@ class Game {
 			return String.valueOf(current.remainingKnights());
 		}
 		
+		public Color getColor() {
+			return current.getColor();
+		}
+		
 		public String getRemainingTiles() {
 			return String.valueOf(current.numTiles());
 		}
@@ -355,12 +361,14 @@ class Game {
 			if(!castlePlayed)
 				return l;
 
-			if(dir == -1) {
+			if(b[x][y].topKnight() < 0) {
+				l = new LocationList(x, y, l);
+			} else if(dir == -1) {
 				if(b[x+1][y] != null && b[x+1][y].valid())
 					l = new LocationList(x+1, y, l) ;
 				if(b[x][y-1] != null && b[x][y-1].valid())
 					l = new LocationList(x, y-1, l);
-				if(b[x][y-1] != null && b[x][y+1].valid())
+				if(b[x][y+1] != null && b[x][y+1].valid())
 					l = new LocationList(x, y+1, l);
 				if(b[x-1][y] != null && b[x-1][y].valid())
 					l = new LocationList(x-1, y, l);
@@ -409,6 +417,7 @@ class Game {
 			}
 
 			movecount++;
+			dir = -1;
 
 			return castlePlayed;
 		}

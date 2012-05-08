@@ -35,10 +35,6 @@ public class GUI implements ActionListener {
         private JButton initTile[][] = new JButton[4][3];
         private JButton close = new JButton("Close");
         private JButton newGame = new JButton("Start Game");
-        private ButtonGroup group = new ButtonGroup();
-        private JMenuBar menuBar = new JMenuBar();          
-        private JMenu fileMenu = new JMenu("File");
-        private JMenu helpMenu = new JMenu("Help");
         private JRadioButton fourPlayers = new JRadioButton("4 Players");
         private JRadioButton threePlayers = new JRadioButton("3 Players");
         private JRadioButton twoPlayers = new JRadioButton("2 Players");
@@ -47,19 +43,12 @@ public class GUI implements ActionListener {
         private JTextField playerThreeName = new JTextField();
         private JTextField playerFourName = new JTextField();
         private String[] playerNames = new String[4];
-        private JLabel playerNameLabel = new JLabel();
         private JLabel playerNameField = new JLabel();
-        private JLabel knightsLabel = new JLabel();
         private JLabel knightsField = new JLabel();
-        private JLabel tilesLabel = new JLabel();
         private JLabel tilesField = new JLabel();
         private JButton playTiles[] = new JButton[2];
         private JButton endTurn = new JButton("End Turn");
-        private JButton back = new JButton("Back");     
-        private JLabel playerOne = new JLabel();
-        private JLabel playerTwo = new JLabel();
-        private JLabel playerThree = new JLabel();
-        private JLabel playerFour = new JLabel();
+        private JButton back = new JButton("Deselect");     
         private int numPlayers = 2;
         private Game game;
         private Tile[][] temp = new Tile[numPlayers][3];
@@ -72,18 +61,38 @@ public class GUI implements ActionListener {
         private JButton begin = new JButton("Begin");
         private JButton playerHandTile[] = new JButton[2];
         private int playerHandTileSelect = 0;
-        private LocationList tempList;
         private Boolean castlePlayed = false;
 
         // Creates GUI
         public GUI() throws IOException
         {
+        		JLabel playerOne = new JLabel();
+        		JLabel playerTwo = new JLabel();
+            	JLabel playerThree = new JLabel();
+            	JLabel playerFour = new JLabel();
+        		JLabel tilesLabel = new JLabel();
+        		JLabel knightsLabel = new JLabel();
+        		JLabel playerNameLabel = new JLabel();
+        		JMenu fileMenu = new JMenu("File");
+        		JMenu helpMenu = new JMenu("Help");
+        		JMenuBar menuBar = new JMenuBar(); 
+        		ButtonGroup group = new ButtonGroup();
                 JMenuItem newAction = new JMenuItem("Start Game");
                 JMenuItem exitAction = new JMenuItem("Exit");
-
                 JMenuItem helpAction = new JMenuItem("Help");
                 JMenuItem aboutAction = new JMenuItem("About");
-
+                playTiles[0] = new JButton("Tile 1");
+                playTiles[1] = new JButton("Tile 2");
+                JLabel handLabel = new JLabel("Hand:");
+                JPanel namePane = new JPanel();
+                JPanel radioPane = new JPanel();
+                JLabel lblPlayerOne = new JLabel("Player One:");
+                JLabel lblPlayerTwo = new JLabel("Player Two:");
+                JLabel lblPlayerThree = new JLabel("Player Three:");
+                JLabel lblPlayerFour = new JLabel("Player Four:");
+                JButton reset = new JButton("Reset Selection");
+                JButton tileBack = new JButton("Back");
+                
                 //Creates the main frame 
                 window.setSize(800,650);                        
                 window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -99,7 +108,6 @@ public class GUI implements ActionListener {
                 board.setLayout(new GridLayout(grid,grid));
                 playerNameLabel.setBounds(5, 10, 50, 25);
 
-
                 playerNameLabel.setText("Player: ");
                 playerNameField.setBounds(65, 10, 125, 25);
                 playerNameField.setText("Test 1");
@@ -111,10 +119,8 @@ public class GUI implements ActionListener {
                 tilesLabel.setText("Tiles Remaining: ");
                 tilesField.setBounds(105, 80, 85, 25);
                 tilesField.setText("0");
-                playTiles[0] = new JButton("Tile 1");
-                playTiles[1] = new JButton("Tile 2");
+                
                 playerStatus.setLocation(600, 0);
-
                 playerStatus.setSize(new Dimension(200, 600));
                 playerStatus.setLayout(null);
 
@@ -126,8 +132,7 @@ public class GUI implements ActionListener {
                 playerStatus.add(tilesField);
                 playerStatus.add(playTiles[0]);
                 playerStatus.add(playTiles[1]);
-
-                JLabel handLabel = new JLabel("Hand:");
+               
                 handLabel.setBounds(80, 115, 40, 25);
                 playerStatus.add(handLabel);
 
@@ -142,7 +147,6 @@ public class GUI implements ActionListener {
                 playerHandTile[0].setBounds(35, 150, 60, 60);
                 playerStatus.add(playerHandTile[0]);
 
-
                 playerHandTile[1].setBounds(100, 150, 60, 60);
                 playerStatus.add(playerHandTile[1]);
                 back.setBounds(5, 220, 90, 25);
@@ -151,7 +155,6 @@ public class GUI implements ActionListener {
                 playerStatus.add(endTurn);
                 endTurn.setEnabled(false);
                 window.getContentPane().setLayout(null);
-
 
                 window.setResizable(false);
                 window.setJMenuBar(menuBar);
@@ -164,9 +167,6 @@ public class GUI implements ActionListener {
 
                 helpMenu.add(helpAction);
                 helpMenu.add(aboutAction);
-
-                JPanel namePane = new JPanel();
-                JPanel radioPane = new JPanel();
 
                 namePane.setLayout(new GridLayout(4,2));
                 radioPane.setLayout(new GridLayout(3,1));
@@ -217,19 +217,15 @@ public class GUI implements ActionListener {
                 tilePick.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 tilePick.getContentPane().setLayout(null);
 
-                JLabel lblPlayerFour = new JLabel("Player Four:");
                 lblPlayerFour.setBounds(5, 200, 100, 25);
                 tilePick.getContentPane().add(lblPlayerFour);
-
-                JLabel lblPlayerThree = new JLabel("Player Three:");
+                
                 lblPlayerThree.setBounds(5, 135, 100, 25);
                 tilePick.getContentPane().add(lblPlayerThree);
-
-                JLabel lblPlayerTwo = new JLabel("Player Two:");
+                
                 lblPlayerTwo.setBounds(5, 70, 100, 25);
                 tilePick.getContentPane().add(lblPlayerTwo);
 
-                JLabel lblPlayerOne = new JLabel("Player One:");
                 lblPlayerOne.setBounds(5, 5, 100, 25);
                 tilePick.getContentPane().add(lblPlayerOne);
 
@@ -262,16 +258,13 @@ public class GUI implements ActionListener {
                 initTile[0][1].setBounds(170, 5, 60, 60);
                 initTile[0][0].setBounds(105, 5, 60, 60);
 
-                JButton tileBack = new JButton("Back");
                 tileBack.setBounds(155, 300, 100, 25);
                 tilePick.getContentPane().add(tileBack);
-
 
                 begin.setBounds(50, 300, 100, 25);
                 tilePick.getContentPane().add(begin);
                 begin.setEnabled(false);
-
-                JButton reset = new JButton("Reset Selection");
+                
                 reset.setBounds(80, 270, 150, 25);
                 tilePick.getContentPane().add(reset);
                 tilePick.setResizable(false);
@@ -281,7 +274,7 @@ public class GUI implements ActionListener {
 
                 newAction.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent arg0) {
-
+                        		//Enable/Disable certain fields and sets the number of players
                                 twoPlayers.addActionListener(new ActionListener() 
                                 {
                                         public void actionPerformed(ActionEvent arg0) {
@@ -295,6 +288,7 @@ public class GUI implements ActionListener {
 
                                         }       
                                 });
+                                //Enable/Disable certain fields and sets the number of players
                                 threePlayers.addActionListener(new ActionListener() 
                                 {
                                         public void actionPerformed(ActionEvent arg0) {
@@ -307,6 +301,7 @@ public class GUI implements ActionListener {
 
                                         }       
                                 });
+                                //Enable/Disable certain fields and sets the number of players
                                 fourPlayers.addActionListener(new ActionListener() 
                                 {
                                         public void actionPerformed(ActionEvent arg0) {
@@ -496,10 +491,6 @@ public class GUI implements ActionListener {
                 });
 
 
-                //setBoard();                   
-
-
-
                 window.setVisible(true);
 
         }
@@ -520,6 +511,7 @@ public class GUI implements ActionListener {
                 }
         }
 
+        //Deselects the tiles at the Tile selection screen during a new game.
         public void resetInitialTile()
         {
                 for(int x = 0; x < 4; x++)
@@ -532,6 +524,7 @@ public class GUI implements ActionListener {
                 }
         }
 
+        //Updates the gui to match what the board has for tiles.
         public void repaint() throws IOException
         {
         	tempGrid = game.getBoard();
@@ -556,10 +549,14 @@ public class GUI implements ActionListener {
                         }
                 }
         }
+        //Begins a new turn
         public void newTurn() throws IOException
         {
+        		
+        		castlePlayed = false;
         		endTurn.setEnabled(false);
                 game.nextTurn(); 
+                playerStatus.setBackground(game.move.getColor());
                 playerNameField.setText(game.move.getName());
                 updateHand();
 
@@ -584,6 +581,7 @@ public class GUI implements ActionListener {
 	            }
         	}
         }
+        //Grabs the next tiles off the deck
         public void updateHand() throws IOException
         {
         	
@@ -610,6 +608,7 @@ public class GUI implements ActionListener {
             tilesField.setText(String.valueOf(game.move.getRemainingTiles()));
             knightsField.setText(String.valueOf(game.move.getReminingKnights()));
         }
+        //Enables valid moves when given a location list
         public void validMoves(LocationList list)
         {
                 for(;list.isNext();list = list.getNext())
@@ -662,7 +661,29 @@ public class GUI implements ActionListener {
         //Selects the square you want to go
         public void actionPerformed(ActionEvent a) 
         {
-                //Draws the letter on the button, disable the button and enables adjacent.
+                //Plays knights
+        		if(castlePlayed == true)
+        		{
+        			for(int x = 0; x < grid; x++)
+                    {
+                            for(int y = 0; y < grid; y++)
+                            {
+                                    if(gridButtons[x][y] == a.getSource())
+                                    {
+                                    		game.move.playKnights(x, y, 1);
+                                    		knightsField.setText(String.valueOf(game.move.getReminingKnights()));
+                                    		
+                                            try {
+                                                    gridButtons[x][y].setIcon(new ImageIcon(ImageIO.read(new File(selectedHandTile.getImage()))));
+                                            } catch (IOException e) {
+                                                    // TODO Auto-generated catch block
+                                                    e.printStackTrace();
+                                            }
+                                    }
+                            }
+                    }
+        		}
+        		//Plays Tile
                 if(playerHandTileSelect == 1)
                 {
                         for(int x = 0; x < grid; x++)
@@ -702,7 +723,6 @@ public class GUI implements ActionListener {
                                                 	else
                                                 	{
                                                 		deselect();
-                                                		disable();
                                                 		if(game.move.getCurrentMove() == 3)
                                                 		{
                                                 			game.move.endTurn(tempHand);
@@ -732,7 +752,7 @@ public class GUI implements ActionListener {
                         }
 
                 }
-
+                //Selects card from hand
                 for(int x = 0; x < 2; x++)
                 {
                         if (playerHandTile[x] == a.getSource())
@@ -756,6 +776,7 @@ public class GUI implements ActionListener {
 
                         }
                 }
+                //Selects initial tiles from the tile selection screen
                 for(int x = 0; x < numPlayers; x++)
                 {
                         for(int y = 0; y < 3; y++)
@@ -775,6 +796,7 @@ public class GUI implements ActionListener {
                         }
 
                 }
+                //Disable/Enable the begin button depending on if they have two tiles selected or not for each player.
                 switch (numPlayers)
                 {
                 case 2: 
