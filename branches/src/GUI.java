@@ -483,6 +483,7 @@ public class GUI implements ActionListener {
                 {
                         public void actionPerformed(ActionEvent arg0)
                         {
+                        			deselect();
                         			game.move.endTurn(tempHand);
                         			try {
                         				newTurn();
@@ -557,7 +558,7 @@ public class GUI implements ActionListener {
         }
         public void newTurn() throws IOException
         {
-
+        		endTurn.setEnabled(false);
                 game.nextTurn(); 
                 playerNameField.setText(game.move.getName());
                 updateHand();
@@ -575,15 +576,17 @@ public class GUI implements ActionListener {
         			gridButtons[x][y].setEnabled(false);
         		}
         	}
-        	for(int x = 0; x < 2; x++)
-            {
-                    playerHandTile[x].setEnabled(false);
-            }
+        	if (castlePlayed == true)
+        	{
+	        	for(int x = 0; x < 2; x++)
+	            {
+	                    playerHandTile[x].setEnabled(false);
+	            }
+        	}
         }
         public void updateHand() throws IOException
         {
-        	tilesField.setText(String.valueOf(game.move.getRemainingTiles()));
-            knightsField.setText(String.valueOf(game.move.getReminingKnights()));
+        	
         	tempHandTile = game.move.getHand();
         	if(tempHandTile.length == 2)
         	{
@@ -604,6 +607,8 @@ public class GUI implements ActionListener {
             {
                     playerHandTile[x].setIcon(new ImageIcon(ImageIO.read(new File(tempHand[x].getImage()))));
             }
+            tilesField.setText(String.valueOf(game.move.getRemainingTiles()));
+            knightsField.setText(String.valueOf(game.move.getReminingKnights()));
         }
         public void validMoves(LocationList list)
         {
@@ -683,23 +688,21 @@ public class GUI implements ActionListener {
                                                 		tempHand[j] = null;
                                                 	}
                                                 }
-                                                castlePlayed = game.move.makeMove(selectedHandTile, x, y, unselectedHandTile);
+                                                game.move.makeMove(selectedHandTile, x, y, unselectedHandTile);
                                                 if(game.move.getCurrentMove()>0)
                                         		{
                                         			endTurn.setEnabled(true);
                                         		}
-                                                if(castlePlayed == true)
-                                                {
-                                                	if (game.move.startKnightMove() == true)
+                                                if (castlePlayed = game.move.startKnightMove() == true)
                                                 	{
                                                 		deselect();
                                                 		disable();
                                                 		validMoves(game.move.KnightMoves());
                                                 	}
-                                                }
                                                 	else
                                                 	{
                                                 		deselect();
+                                                		disable();
                                                 		if(game.move.getCurrentMove() == 3)
                                                 		{
                                                 			game.move.endTurn(tempHand);
@@ -714,6 +717,7 @@ public class GUI implements ActionListener {
                                                         try {
 	                                                        	updateHand();
 	                                                        	deselect();
+	                                                        	disable();
 	        													repaint();
 	        												} catch (IOException e) {
 	        													// TODO Auto-generated catch block
@@ -733,6 +737,7 @@ public class GUI implements ActionListener {
                 {
                         if (playerHandTile[x] == a.getSource())
                         {
+                        	disable();
                                 if(playerHandTileSelect < 1)
                                 {
                                 		validMoves(game.move.getValidMoves());
