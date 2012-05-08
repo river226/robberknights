@@ -20,6 +20,7 @@
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.Collections; 
 
 class Player {
 
@@ -70,25 +71,14 @@ class Player {
 		int none = 0, castle = 1, village = 2, town = 3;
 		int lake = 0, plain = 1, woods = 2, mountains = 3;
 
-		// set A - Plain, Plain Village, Mountains, Plain Castle
-		tempDeck.add(new Tile(plain, none, 'A'));
-		tempDeck.add(new Tile(plain, village, 'A'));
-		tempDeck.add(new Tile(mountains, none, 'A'));
-		tempDeck.add(new Tile(plain, castle, 'A'));
-
-		// set B - Water, Plain Castle, Plain Village, Woods Village, Plain Town
-		tempDeck.add(new Tile(lake, none, 'B'));
-		tempDeck.add(new Tile(plain, castle, 'B'));
-		tempDeck.add(new Tile(plain, village, 'B'));
-		tempDeck.add(new Tile(woods, village, 'B'));
-		tempDeck.add(new Tile(plain, town, 'B'));
-
-		// set C - Woods Town, Plain, Plain Castle, Plain Village, Woods Castle
-		tempDeck.add(new Tile(woods, town, 'C'));
-		tempDeck.add(new Tile(plain, none, 'C'));
-		tempDeck.add(new Tile(plain, castle, 'C'));
-		tempDeck.add(new Tile(plain, village, 'C'));
-		tempDeck.add(new Tile(woods, castle,'C'));
+		// set E - Plain Castle, Woods Village, Plain Village, Woods Castle, Plain
+		tempDeck.add(new Tile(plain, castle, 'E'));
+		tempDeck.add(new Tile(woods, village, 'E'));
+		tempDeck.add(new Tile(plain, village, 'E'));
+		tempDeck.add(new Tile(woods, castle, 'E'));
+		tempDeck.add(new Tile(plain, none, 'E'));
+		shuffle(tempDeck);
+		tempDeck = new ArrayList<Tile>(0);
 
 		// set D - Plain Castle, Mountains, Woods Village, Plain Castle, Plain Village
 		tempDeck.add(new Tile(plain, castle, 'D'));
@@ -96,15 +86,35 @@ class Player {
 		tempDeck.add(new Tile(woods, village, 'D'));
 		tempDeck.add(new Tile(plain, castle, 'D'));
 		tempDeck.add(new Tile(plain, village, 'D'));
-
-		// set E - Plain Castle, Woods Village, Plain Village, Woods Castle, Plain
-		tempDeck.add(new Tile(plain, castle, 'E'));
-		tempDeck.add(new Tile(woods, village, 'E'));
-		tempDeck.add(new Tile(plain, village, 'E'));
-		tempDeck.add(new Tile(woods, castle, 'E'));
-		tempDeck.add(new Tile(plain, none, 'E'));
-
 		shuffle(tempDeck);
+		tempDeck = new ArrayList<Tile>(0);
+
+		// set C - Woods Town, Plain, Plain Castle, Plain Village, Woods Castle
+		tempDeck.add(new Tile(woods, town, 'C'));
+		tempDeck.add(new Tile(plain, none, 'C'));
+		tempDeck.add(new Tile(plain, castle, 'C'));
+		tempDeck.add(new Tile(plain, village, 'C'));
+		tempDeck.add(new Tile(woods, castle,'C'));
+		shuffle(tempDeck);
+		tempDeck = new ArrayList<Tile>(0);
+
+		// set B - Water, Plain Castle, Plain Village, Woods Village, Plain Town
+		tempDeck.add(new Tile(lake, none, 'B'));
+		tempDeck.add(new Tile(plain, castle, 'B'));
+		tempDeck.add(new Tile(plain, village, 'B'));
+		tempDeck.add(new Tile(woods, village, 'B'));
+		tempDeck.add(new Tile(plain, town, 'B'));
+		shuffle(tempDeck);
+		tempDeck = new ArrayList<Tile>(0);
+
+		// set A - Plain, Plain Village, Mountains, Plain Castle
+		tempDeck.add(new Tile(plain, castle, 'A'));
+		tempDeck.add(new Tile(plain, none, 'A'));
+		tempDeck.add(new Tile(plain, village, 'A'));
+		tempDeck.add(new Tile(mountains, none, 'A'));
+		
+		shuffle(tempDeck);
+		tempDeck = new ArrayList<Tile>(0);
 	}
 
 	/**Randomize tile order in (aka shuffle) deck 
@@ -116,21 +126,10 @@ class Player {
 		Tile temp;
 		int x = 0;
 
-		for(int i = 4; i < 24; i++){
-			int p = 4 + gen.nextInt(5);
+		if(tempDeck.get(0).getLetter() != 'A')
+			Collections.shuffle(tempDeck);
 
-			temp = tempDeck.get(p);
-			tempDeck.add(p, tempDeck.get(i));
-			tempDeck.add(i, temp);
-			x++;
-
-			if(x == 3){
-				i++;
-				x = 0;
-			}      
-		}
-
-		for(int j = 23; j >= 0; j--)
+		for(int j = 0; j < tempDeck.size(); j++)
 			deck.push(tempDeck.get(j));
 	}
 
@@ -234,7 +233,7 @@ class Player {
 		if(numTiles() > 0) {
 			if(handSize() < 2)
 				currentSet--;
-				return addTile(deck.pop());
+			return addTile(deck.pop());
 		}
 
 		return 1;
