@@ -138,7 +138,7 @@ class Tile {
 
 	/**Retrieves the top knight on the tile
 	 * 
-	 * @return remaining knights
+	 * @return winning knight
 	 */
 	public int topKnight() {
 		if(numKnights == 0) return -1;
