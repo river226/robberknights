@@ -221,8 +221,8 @@ class Board {
 		int slot = max/2;
 		int set = 4;
 		if(gen.nextInt(100) > 50) { // randomize placement: vertical
-			lefY = set;
-			topX = slot;
+			lefY = slot;
+			topX = set;
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
 					placeTile(t[j][k], set, slot);
@@ -231,11 +231,11 @@ class Board {
 				set++;
 				slot -= 2;
 			}
-			ritY = set;
-			botX = slot;
+			ritY = slot+2;
+			botX = set;
 		} else { // randomize placement: horizontal
-			lefY = slot;
-			topX = set;
+			lefY = set;
+			topX = slot;
 			for(int j = 0; j < nump; j++) { // place tiles on grid
 				for(int k = 0; k < 2; k++) {
 					placeTile(t[j][k], slot, set);
@@ -244,8 +244,8 @@ class Board {
 				set++;
 				slot -= 2;
 			}
-			ritY = slot;
-			botX = set;
+			ritY = set;
+			botX = slot + 2;
 		}
 
 		return getGrid();
@@ -324,15 +324,15 @@ class Board {
 		if(getLeftY() == 0) {
 			int c = 1;
 			moveField(3, c);
-			setLeftY(getLeftY() - c);
-			setRightY(getRightY() - c);
+			setLeftY(getLeftY() + c);
+			setRightY(getRightY() + c);
 			reset();
 		}
 		else if(getRightY() == getMax() + 1) {
 			int c = 1;
 			moveField(2, c);
-			setLeftY(getLeftY()+ c);
-			setRightY(getRightY() + c);
+			setLeftY(getLeftY()- c);
+			setRightY(getRightY() - c);
 			reset();
 		}
 
@@ -366,21 +366,21 @@ class Board {
 				}
 			}
 		} else if(dir == 1) {
-			for(int i = getBottomX(); i <= getTopX(); i--) {
+			for(int i = getBottomX(); i >= getTopX(); i--) {
 				for(int j = getLeftY(); j <= getRightY(); j++) {
 					grid[i + dis][j] = grid[i][j];
 					grid[i][j] = null;
 				}
 			}
 		} else if(dir == 2) {
-			for(int i =  getLeftY(); i <= getRightY() ; i++) {
+			for(int i =  getLeftY(); i <= getRightY(); i++) {
 				for(int j = getTopX(); j <= getBottomX(); j++) {
 					grid[j][i - dis] = grid[j][i];
 					grid[j][i] = null;
 				}
 			}
 		} else {
-			for(int i =  getLeftY(); i <= getRightY(); i++) {
+			for(int i =  getRightY(); i >= getLeftY(); i--) {
 				for(int j = getTopX(); j <= getBottomX(); j++) {
 					grid[j][i + dis] = grid[j][i];
 					grid[j][i] = null;
