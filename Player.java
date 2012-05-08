@@ -17,6 +17,7 @@
  * Hand holds up to 2 tiles at any given moment
  */
 
+import java.awt.Color;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -28,7 +29,7 @@ class Player {
 	// handSize hold the current position in the hand array
 	private int currentSet, handSize;
 	private final int id;
-	private final String color;
+	private final Color color;
 	private int remainingKnights;
 	private final String name;
 	private Stack<Tile> hand;
@@ -47,14 +48,18 @@ class Player {
 		currentSet = 24;
 		handSize = 0;
 
-		if(id == 1)
-			color = "Red";
-		else if(id == 2)
-			color = "Blue";
-		else if(id == 3)
-			color = "Yellow";
-		else
-			color = "Green";
+		if(id == 1){
+			color = Color.red;
+		}
+		else if(id == 2){
+			color = Color.blue;
+		}
+		else if(id == 3){
+			color = Color.yellow;
+		}
+		else{
+			color = Color.green;
+		}
 
 		// player starts out with 30 knights
 		remainingKnights = 30;
@@ -74,7 +79,7 @@ class Player {
 		// set E - Plain Castle, Woods Village, Plain Village, Woods Castle, Plain
 		tempDeck.add(new Tile(plain, castle, 'E'));
 		tempDeck.add(new Tile(woods, village, 'E'));
-		tempDeck.add(new Tile(plain, village, 'E'));
+		tempDeck.add(new Tile(plain, town, 'E'));
 		tempDeck.add(new Tile(woods, castle, 'E'));
 		tempDeck.add(new Tile(plain, none, 'E'));
 		shuffle(tempDeck);
@@ -85,7 +90,7 @@ class Player {
 		tempDeck.add(new Tile(mountains, none, 'D'));
 		tempDeck.add(new Tile(woods, village, 'D'));
 		tempDeck.add(new Tile(plain, castle, 'D'));
-		tempDeck.add(new Tile(plain, village, 'D'));
+		tempDeck.add(new Tile(plain, town, 'D'));
 		shuffle(tempDeck);
 		tempDeck = new ArrayList<Tile>(0);
 
@@ -138,7 +143,7 @@ class Player {
 	 * 
 	 * @return String of color name
 	 */
-	public String getColor() {
+	public Color getColor() {
 		return color;
 	}
 
@@ -231,9 +236,10 @@ class Player {
 	 */
 	public int draw() {
 		if(numTiles() > 0) {
-			if(handSize() < 2)
+			if(handSize() < 2){
 				currentSet--;
-			return addTile(deck.pop());
+				return addTile(deck.pop());
+			}
 		}
 
 		return 1;
