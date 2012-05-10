@@ -64,6 +64,16 @@ class Board {
 
 		return 1;
 	}
+	
+	/**Returns minimun required knights to place on tile
+	 * 
+	 * @param x int x coordinate 
+	 * @param y int y coordinate
+	 * @return int 0 = no knights allowed, 1..3 = number of knights required
+	 */
+	public int getMinKnights(int x , int y){
+		return grid[x][y].minKnight();
+	}
 
 	/**Retrieves grid
 	 * 
