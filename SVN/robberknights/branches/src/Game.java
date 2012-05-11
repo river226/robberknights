@@ -379,27 +379,19 @@ class Game {
 					switch(dir)
 					{
 					case(0): // right
-						if(b[x+1][y] != null && b[x+1][y].valid() && b
-
-[x+1][y].minKnight() <= Knightsleft)
+						if(b[x+1][y] != null && b[x+1][y].valid() && b[x+1][y].minKnight() <= Knightsleft)
 							l = new LocationList(x+1, y, l);
 						break;
 					case(1): // left
-						if(b[x-1][y] != null && b[x-1][y].valid() && b[x-
-
-1][y].minKnight() <= Knightsleft)
+						if(b[x-1][y] != null && b[x-1][y].valid() && b[x-1][y].minKnight() <= Knightsleft)
 							l = new LocationList(x-1, y, l);
 						break;
 					case(2): // up
-						if(b[x][y-1] != null && b[x][y-1].valid() && b[x]
-
-[y-1].minKnight() <= Knightsleft)
+						if(b[x][y-1] != null && b[x][y-1].valid() && b[x][y-1].minKnight() <= Knightsleft)
 							l = new LocationList(x, y-1, l);
 						break;
 					case(3): // down
-						if(b[x][y+1] != null && b[x][y+1].valid() && b[x]
-
-[y+1].minKnight() <= Knightsleft)
+						if(b[x][y+1] != null && b[x][y+1].valid() && b[x][y+1].minKnight() <= Knightsleft)
 							l = new LocationList(x, y+1, l);
 						break;
 					default: // no direction
@@ -415,6 +407,7 @@ class Game {
 							l = new LocationList(x-1, y, l);
 					}
 				}
+				if(b[x][y].getNumKnights()<4)
 				l = new LocationList(x, y, l);
 			}
 			return l;
