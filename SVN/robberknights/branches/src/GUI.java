@@ -653,7 +653,7 @@ public class GUI implements ActionListener {
                                         // TODO Auto-generated catch block
                                         e.printStackTrace();
                                 }
-                                if(game.move.getKnightsLeft()>0){
+                                if(game.move.getKnightsLeft()>0 && game.move.KnightMoves() != null){
                            		validMoves(game.move.KnightMoves());
                                 }else{
                                 	game.move.endMove();
