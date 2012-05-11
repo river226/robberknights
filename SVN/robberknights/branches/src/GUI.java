@@ -26,7 +26,7 @@ public class GUI implements ActionListener {
 
         //GUI Components
         private int grid = 12; // Defaults the grid size to 12x12
-        private int imageSize = 50;  //Default size assuming a 4 player game
+        private int imageSize = 66;  //Default size is for 2 player game
         private JFrame window = new JFrame("Robber Knights");   
         private JPanel board =  new JPanel();
         private JPanel playerStatus = new JPanel();
@@ -65,8 +65,8 @@ public class GUI implements ActionListener {
         private Boolean castlePlayed = false;
 
         // Creates GUI
-        public GUI() throws IOException
-        {
+        public GUI() throws IOException{
+        	
         		JLabel playerOne = new JLabel();
         		JLabel playerTwo = new JLabel();
             	JLabel playerThree = new JLabel();
@@ -273,7 +273,7 @@ public class GUI implements ActionListener {
                                                 playerFourName.setText(null);
                                                 playerFourName.setBackground(null);
                                                 numPlayers = 2;
-        //                                        imageSize = 80;
+                                                imageSize = 66;
                                         }       
                                 });
                                 
@@ -286,7 +286,7 @@ public class GUI implements ActionListener {
                                                 playerFourName.setText(null);
                                                 playerFourName.setBackground(null);
                                                 numPlayers = 3;
-        //                                        imageSize = 30;
+                                                imageSize = 55;
                                         }       
                                 });
                                 
@@ -298,6 +298,7 @@ public class GUI implements ActionListener {
                                                 playerFourName.setEditable(true);
                                                 playerFourName.setBackground(Color.WHITE);
                                                 numPlayers = 4;
+                                                imageSize = 50;
                                         }       
                                 });
                                 
@@ -516,7 +517,7 @@ public class GUI implements ActionListener {
                                         gridButtons[x][y].setText("");
                                         gridButtons[x][y].setName("");
                                         gridButtons[x][y].setEnabled(true);
-                                        gridButtons[x][y].setIcon(new ImageIcon(ImageIO.read(new File(tempGrid[x][y].getImage()))));
+                                        gridButtons[x][y].setIcon(new ImageIcon(img));
                                         
                                 }else{
                                 	gridButtons[x][y].setIcon(null);
@@ -692,7 +693,8 @@ public class GUI implements ActionListener {
                                         		
                                         		
                                                 try {
-                                                        gridButtons[x][y].setIcon(new ImageIcon(ImageIO.read(new File(selectedHandTile.getImage()))));
+                                                	Image img = (new ImageIcon(ImageIO.read(new File(selectedHandTile.getImage())))).getImage().getScaledInstance(imageSize, imageSize, java.awt.Image.SCALE_SMOOTH);
+                                                        gridButtons[x][y].setIcon(new ImageIcon(img));
                                                 } catch (IOException e) {
                                                         // TODO Auto-generated catch block
                                                         e.printStackTrace();
