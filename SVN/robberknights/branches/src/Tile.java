@@ -86,9 +86,9 @@ class Tile {
 		return value;
 	}
 
-	/**idk wtf this does
+	/** validates that a knight can be played on a tile
 	 * 
-	 * @return bool
+	 * @return boolean
 	 */
 	public boolean valid() {
 		if(enviroment > 0  && minKnight() <= 4 - numKnights)
@@ -153,7 +153,11 @@ class Tile {
 	public int minKnight() {
 		return enviroment;
 	}
-
+	
+	public int getNumKnights() {
+		return numKnights;
+	}
+	
 	/**Gets the filepath for the image of 
 	 * the file
 	 * 
@@ -178,6 +182,17 @@ class Tile {
 		default :
 			name = "none_" + name; break;
 		}
+		switch(getNumKnights()) {
+		case(1):
+			name = "one/" + name; break; 
+		case(2):
+			name = "two/" + name; break; 
+		case(3):
+			name = "three/" + name; break; 
+		case(4):
+			name = "four/" + name; break; 
+		default: break;
+	}
 
 		name = "src/library/images/tiles/" + getEnviroment()  + "/" + name; // may need to add 'src/' to file path
 
